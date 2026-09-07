@@ -190,7 +190,7 @@
 		];
 		const SUPABASE_URL = 'https://upkayrgkhcuxvimmidgr.supabase.co';
 		const SUPABASE_KEY = 'sb_publishable_kSR7NWGjWdTvFwsryAUbmw_dd01X-75';
-		const state = { current: 0, correct: 0, answered: false, started: false, studentName: '', exam: [] };
+		const state = { current: 0, correct: 0, answered: false, started: false, studentName: '', sessionId: '', eventSaved: false, exam: [] };
 		const $ = (id) => document.getElementById(id);
 		const screens = ['start-screen', 'quiz-screen', 'result-screen'];
 		const show = (id) => screens.forEach((screen) => $(screen).hidden = screen !== id);
@@ -249,6 +249,17 @@
 			}
 		}
 
+		function saveParticipation(status) {
+			if (!state.sessionId || state.eventSaved && status === 'abandoned') return;
+			if (status === 'abandoned') state.eventSaved = true;
+			fetch(`${SUPABASE_URL}/rest/v1/participation_events`, {
+				method: 'POST',
+				keepalive: true,
+				headers: { apikey: SUPABASE_KEY, Authorization: `Bearer ${SUPABASE_KEY}`, 'Content-Type': 'application/json', Prefer: 'return=minimal' },
+				body: JSON.stringify({ session_id: state.sessionId, name: state.studentName, status, question_number: state.current })
+			}).catch(() => {});
+		}
+
 		function renderQuestion() {
 			const item = state.exam[state.current];
 			$('question-count').textContent = `Pregunta ${String(state.current + 1).padStart(2, '0')} / ${state.exam.length}`;
@@ -278,6 +289,8 @@
 		}
 
 		function finish() {
+			saveParticipation('completed');
+			state.started = false;
 			const percentage = Math.round((state.correct / state.exam.length) * 100);
 			$('score').textContent = `${percentage}%`;
 			$('correct-count').textContent = `${state.correct} / ${state.exam.length}`;
@@ -290,6 +303,7 @@
 		function lockAttempt() {
 			if (!state.started) return;
 			state.started = false;
+			saveParticipation('abandoned');
 			$('lock-screen').hidden = false;
 		}
 
@@ -298,6 +312,9 @@
 			if (name.length < 2) { $('student-name').focus(); $('student-name').setCustomValidity('Escribe tu nombre para continuar.'); $('student-name').reportValidity(); return; }
 			$('student-name').setCustomValidity('');
 			state.studentName = name;
+			state.sessionId = crypto.randomUUID();
+			state.eventSaved = false;
+			saveParticipation('registered');
 			createExam();
 			state.started = true;
 			show('quiz-screen');
