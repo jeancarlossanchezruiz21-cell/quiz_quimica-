@@ -153,6 +153,7 @@
 					<div class="result-row"><span>Estado</span><strong>Intento cerrado</strong></div>
 				</div>
 				<p id="ranking-status" class="lock-note">Guardando resultado en el ranking...</p>
+				<button id="restart-btn" class="secondary">Nuevo intento</button>
 			</section>
 		</div>
 	</main>
@@ -191,7 +192,6 @@
 		];
 		const SUPABASE_URL = 'https://upkayrgkhcuxvimmidgr.supabase.co';
 		const SUPABASE_KEY = 'sb_publishable_kSR7NWGjWdTvFwsryAUbmw_dd01X-75';
-		const attemptKey = `quimio_completed_${Math.floor(Date.now() / (24 * 60 * 60 * 1000))}`;
 		const state = { current: 0, correct: 0, answered: false, started: false, studentName: '', exam: [] };
 		const $ = (id) => document.getElementById(id);
 		const screens = ['start-screen', 'quiz-screen', 'result-screen'];
@@ -289,7 +289,6 @@
 		}
 
 		function finish() {
-			localStorage.setItem(attemptKey, 'true');
 			const percentage = Math.round((state.correct / state.exam.length) * 100);
 			$('score').textContent = `${percentage}%`;
 			$('correct-count').textContent = `${state.correct} / ${state.exam.length}`;
@@ -300,14 +299,12 @@
 		}
 
 		function lockAttempt() {
-			if (!state.started || localStorage.getItem(attemptKey) === 'true') return;
+			if (!state.started) return;
 			state.started = false;
-			localStorage.setItem(attemptKey, 'true');
 			$('lock-screen').hidden = false;
 		}
 
 		$('start-btn').addEventListener('click', () => {
-			if (localStorage.getItem(attemptKey) === 'true') { $('lock-screen').hidden = false; return; }
 			const name = $('student-name').value.trim();
 			if (name.length < 2) { $('student-name').focus(); $('student-name').setCustomValidity('Escribe tu nombre para continuar.'); $('student-name').reportValidity(); return; }
 			$('student-name').setCustomValidity('');
@@ -318,6 +315,15 @@
 			renderQuestion();
 			document.documentElement.requestFullscreen?.().catch(() => {});
 		});
+		$('restart-btn').addEventListener('click', () => {
+			state.current = 0;
+			state.correct = 0;
+			state.answered = false;
+			state.started = false;
+			$('student-name').value = '';
+			show('start-screen');
+			loadRanking();
+		});
 		$('next-btn').addEventListener('click', () => {
 			if (state.current === state.exam.length - 1) finish();
 			else { state.current++; state.answered = false; renderQuestion(); }
@@ -325,7 +331,6 @@
 		document.addEventListener('visibilitychange', () => { if (document.hidden) lockAttempt(); });
 		window.addEventListener('pagehide', lockAttempt);
 		window.addEventListener('beforeunload', (event) => { if (state.started) { event.preventDefault(); event.returnValue = ''; } });
-		if (localStorage.getItem(attemptKey) === 'true') $('start-btn').textContent = 'Intento ya utilizado';
 		loadRanking();
 	</script>
 </body>
