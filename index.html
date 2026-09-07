@@ -224,7 +224,7 @@
 
 		async function loadRanking() {
 			try {
-				const response = await fetch(`${SUPABASE_URL}/rest/v1/ranking?select=name,points,correct,created_at&order=points.desc,correct.desc,created_at.asc&limit=10`, {
+				const response = await fetch(`${SUPABASE_URL}/rest/v1/ranking?select=name,points,correct,created_at&order=points.desc,correct.desc,created_at.desc&limit=10`, {
 					headers: { apikey: SUPABASE_KEY, Authorization: `Bearer ${SUPABASE_KEY}` }
 				});
 				if (!response.ok) throw new Error('ranking unavailable');
@@ -243,6 +243,7 @@
 				});
 				if (!response.ok) throw new Error('result not saved');
 				$('ranking-status').textContent = 'Resultado guardado en el ranking compartido.';
+				await loadRanking();
 			} catch (error) {
 				$('ranking-status').textContent = 'No se pudo sincronizar el ranking. Revisa la conexión con el servidor.';
 			}
