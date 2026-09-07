@@ -112,7 +112,7 @@
 
 			<section id="start-screen" class="screen">
 				<h1>Piensa.<br><em>Reacciona.</em><br>Aprende.</h1>
-				<p class="intro">Un reto rápido para poner a prueba tus bases de química. Sin anuncios, sin distracciones y listo para jugar sin conexión.</p>
+				<p class="intro">Un reto rápido para poner a prueba tus conocimientos sobre gases ideales. Sin anuncios, sin distracciones y listo para jugar.</p>
 				<div class="feature-grid">
 					<div class="feature"><b>10</b><span>preguntas</span></div>
 					<div class="feature"><b>01</b><span>intento único</span></div>
@@ -168,26 +168,26 @@
 	<script>
 		'use strict';
 		const questions = [
-			{ topic: 'Estructura', text: '¿Qué partícula subatómica tiene carga negativa?', options: ['Protón', 'Neutrón', 'Electrón', 'Núcleo'], answer: 2, explain: 'Correcto: el electrón tiene carga negativa.' },
-			{ topic: 'Materia', text: '¿Cuál es el símbolo químico del sodio?', options: ['So', 'Na', 'Sd', 'S'], answer: 1, explain: 'Correcto: Na viene del latín natrium.' },
-			{ topic: 'Enlaces', text: '¿Qué enlace se forma al compartir electrones?', options: ['Iónico', 'Metálico', 'Covalente', 'Nuclear'], answer: 2, explain: 'Correcto: los enlaces covalentes comparten electrones.' },
-			{ topic: 'Tabla periódica', text: '¿Cuál de estos elementos es un gas noble?', options: ['Cloro', 'Oxígeno', 'Neón', 'Carbono'], answer: 2, explain: 'Correcto: el neón pertenece al grupo de gases nobles.' },
-			{ topic: 'Medición', text: '¿Qué mide el pH de una disolución?', options: ['Su masa', 'Su acidez', 'Su volumen', 'Su densidad'], answer: 1, explain: 'Correcto: el pH indica la acidez o basicidad.' },
-			{ topic: 'Reacciones', text: '¿Qué gas se libera normalmente en una combustión?', options: ['Dióxido de carbono', 'Helio', 'Hidrógeno', 'Ozono'], answer: 0, explain: 'Correcto: una combustión produce dióxido de carbono.' },
-			{ topic: 'Materia', text: '¿Cuál es el estado del agua a 100 °C al nivel del mar?', options: ['Sólido', 'Líquido', 'Gaseoso', 'Plasma'], answer: 2, explain: 'Correcto: a esa temperatura hierve y pasa a gas.' },
-			{ topic: 'Cálculo químico', text: '¿Cuántos átomos de oxígeno hay en H₂O?', options: ['1', '2', '3', '0'], answer: 0, explain: 'Correcto: el subíndice 2 solo afecta al hidrógeno.' },
-			{ topic: 'Ácidos y bases', text: 'Una sustancia con pH 3 es...', options: ['Ácida', 'Neutra', 'Básica', 'Metálica'], answer: 0, explain: 'Correcto: los valores menores que 7 son ácidos.' },
-			{ topic: 'Laboratorio', text: '¿Qué instrumento mide con precisión un volumen líquido?', options: ['Balanza', 'Probeta', 'Termómetro', 'Mechero'], answer: 1, explain: 'Correcto: la probeta mide volúmenes de líquidos.' },
-			{ topic: 'Estructura', text: '¿Dónde se concentra casi toda la masa de un átomo?', options: ['En los electrones', 'En el núcleo', 'En la corteza', 'En los enlaces'], answer: 1, explain: 'Correcto: protones y neutrones están en el núcleo.' },
-			{ topic: 'Tabla periódica', text: '¿Qué información indica el número atómico?', options: ['Número de protones', 'Número de neutrones', 'Masa del átomo', 'Número de moléculas'], answer: 0, explain: 'Correcto: el número atómico es el número de protones.' },
-			{ topic: 'Materia', text: '¿Cuál es una propiedad intensiva?', options: ['Masa', 'Volumen', 'Densidad', 'Longitud'], answer: 2, explain: 'Correcto: la densidad no depende de la cantidad de materia.' },
-			{ topic: 'Reacciones', text: '¿Qué principio debe cumplirse al balancear una reacción?', options: ['Conservar los átomos', 'Cambiar los elementos', 'Eliminar productos', 'Duplicar el solvente'], answer: 0, explain: 'Correcto: los átomos se conservan en una reacción química.' },
-			{ topic: 'Enlaces', text: '¿Qué ion forma normalmente el cloro?', options: ['Cl+', 'Cl2+', 'Cl−', 'Cl2−'], answer: 2, explain: 'Correcto: el cloro gana un electrón y forma Cl−.' },
-			{ topic: 'Ácidos y bases', text: '¿Qué sustancia puede cambiar el color de un indicador?', options: ['Una solución ácida o básica', 'Un metal sólido', 'Un gas noble', 'Una mezcla homogénea neutra'], answer: 0, explain: 'Correcto: los ácidos y las bases cambian el color de los indicadores.' },
-			{ topic: 'Gases', text: 'Si aumenta la temperatura de un gas a presión constante, su volumen...', options: ['Disminuye', 'Aumenta', 'Desaparece', 'No puede medirse'], answer: 1, explain: 'Correcto: el volumen aumenta con la temperatura.' },
-			{ topic: 'Separación', text: '¿Qué método separa un sólido insoluble de un líquido?', options: ['Filtración', 'Destilación', 'Cromatografía', 'Fusión'], answer: 0, explain: 'Correcto: la filtración retiene el sólido y deja pasar el líquido.' },
-			{ topic: 'Medición', text: '¿Cuál es la unidad básica de cantidad de sustancia?', options: ['Gramo', 'Litro', 'Mol', 'Kelvin'], answer: 2, explain: 'Correcto: el mol es la unidad de cantidad de sustancia.' },
-			{ topic: 'Laboratorio', text: '¿Qué equipo se usa para proteger los ojos?', options: ['Guantes', 'Gafas de seguridad', 'Bata', 'Pinzas'], answer: 1, explain: 'Correcto: las gafas protegen los ojos de salpicaduras.' }
+			{ topic: 'Conceptos básicos', text: '¿Qué variables relaciona la ley de Boyle para una cantidad fija de gas a temperatura constante?', options: ['Presión y volumen', 'Masa y temperatura', 'Densidad y masa', 'Volumen y cantidad de sustancia'], answer: 0, explain: 'Correcto: a temperatura constante, la presión y el volumen son inversamente proporcionales.' },
+			{ topic: 'Ley de Charles', text: 'A presión constante, si aumenta la temperatura absoluta de un gas, su volumen...', options: ['Disminuye', 'Aumenta', 'Permanece igual', 'Se vuelve cero'], answer: 1, explain: 'Correcto: el volumen es directamente proporcional a la temperatura absoluta.' },
+			{ topic: 'Ley de Gay-Lussac', text: 'En un recipiente rígido, al aumentar la temperatura absoluta de un gas, la presión...', options: ['Disminuye', 'Aumenta', 'No cambia', 'Desaparece'], answer: 1, explain: 'Correcto: a volumen constante, la presión aumenta con la temperatura absoluta.' },
+			{ topic: 'Ecuación ideal', text: '¿Cuál es la ecuación de los gases ideales?', options: ['PV = nRT', 'P = mV', 'V = PT', 'n = PR'], answer: 0, explain: 'Correcto: la ecuación de estado es PV = nRT.' },
+			{ topic: 'Temperatura', text: '¿Qué escala de temperatura debe usarse en la ecuación PV = nRT?', options: ['Celsius', 'Fahrenheit', 'Kelvin', 'Rankine solamente'], answer: 2, explain: 'Correcto: la temperatura debe expresarse en kelvin.' },
+			{ topic: 'Constante R', text: '¿Qué representa R en la ecuación de los gases ideales?', options: ['La masa molar', 'La constante universal de los gases', 'El radio del recipiente', 'La densidad'], answer: 1, explain: 'Correcto: R es la constante universal de los gases.' },
+			{ topic: 'Volumen molar', text: 'A 0 °C y 1 atm, un mol de gas ideal ocupa aproximadamente...', options: ['1 L', '11,2 L', '22,4 L', '44,8 L'], answer: 2, explain: 'Correcto: en condiciones normales, un mol ocupa aproximadamente 22,4 L.' },
+			{ topic: 'Presión', text: '¿Qué ocurre con la presión si el volumen se reduce a la mitad a temperatura constante?', options: ['Se reduce a la mitad', 'Se duplica', 'No cambia', 'Se hace negativa'], answer: 1, explain: 'Correcto: por la ley de Boyle, al reducir el volumen a la mitad la presión se duplica.' },
+			{ topic: 'Cantidad de gas', text: 'Si se duplica la cantidad de moles a temperatura y volumen constantes, la presión...', options: ['Se duplica', 'Se reduce a la mitad', 'No cambia', 'Se vuelve cero'], answer: 0, explain: 'Correcto: la presión es directamente proporcional a la cantidad de gas.' },
+			{ topic: 'Unidades', text: '¿Cuál es una unidad común de presión?', options: ['Pascal', 'Mol', 'Kelvin', 'Metro cúbico'], answer: 0, explain: 'Correcto: el pascal es la unidad de presión del sistema internacional.' },
+			{ topic: 'Unidades', text: '¿Cuál es una unidad común de volumen en la ecuación de gases?', options: ['Litro', 'Kelvin', 'Gramo', 'Mol por segundo'], answer: 0, explain: 'Correcto: el volumen puede expresarse en litros si se usa la constante R adecuada.' },
+			{ topic: 'Gas ideal', text: 'En el modelo de gas ideal, las partículas...', options: ['Ocupan un volumen despreciable', 'Están completamente quietas', 'Se atraen fuertemente', 'Tienen todas la misma velocidad'], answer: 0, explain: 'Correcto: se considera despreciable el volumen propio de las partículas.' },
+			{ topic: 'Gas ideal', text: 'En un gas ideal, las colisiones entre partículas y paredes se consideran...', options: ['Inelásticas', 'Elásticas', 'Imposibles', 'Químicas'], answer: 1, explain: 'Correcto: las colisiones se consideran perfectamente elásticas.' },
+			{ topic: 'Energía', text: 'La energía cinética promedio de las partículas de un gas depende principalmente de...', options: ['La temperatura absoluta', 'El color del gas', 'La forma del recipiente', 'La presión atmosférica solamente'], answer: 0, explain: 'Correcto: la energía cinética promedio aumenta con la temperatura absoluta.' },
+			{ topic: 'Densidad', text: 'A la misma temperatura y presión, un gas con mayor masa molar suele tener...', options: ['Menor densidad', 'Mayor densidad', 'La misma densidad siempre', 'Volumen cero'], answer: 1, explain: 'Correcto: a igual temperatura y presión, la densidad aumenta con la masa molar.' },
+			{ topic: 'Mezclas', text: 'La ley de Dalton indica que la presión total de una mezcla de gases es...', options: ['La suma de sus presiones parciales', 'La resta de sus masas', 'Siempre igual a cero', 'La presión del gas más ligero'], answer: 0, explain: 'Correcto: la presión total es la suma de las presiones parciales.' },
+			{ topic: 'Difusión', text: 'Según la ley de Graham, un gas más ligero se difunde generalmente...', options: ['Más lentamente', 'Más rápidamente', 'A la misma velocidad siempre', 'Solo si está líquido'], answer: 1, explain: 'Correcto: los gases de menor masa molar se difunden más rápido.' },
+			{ topic: 'Transformaciones', text: 'En una transformación isotérmica, ¿qué magnitud permanece constante?', options: ['La temperatura', 'La presión siempre', 'El volumen siempre', 'La cantidad de partículas siempre'], answer: 0, explain: 'Correcto: isotérmica significa a temperatura constante.' },
+			{ topic: 'Transformaciones', text: 'En una transformación isobárica, ¿qué magnitud permanece constante?', options: ['La presión', 'La temperatura', 'El volumen', 'La energía cinética'], answer: 0, explain: 'Correcto: isobárica significa a presión constante.' },
+			{ topic: 'Transformaciones', text: 'En una transformación isocórica, ¿qué magnitud permanece constante?', options: ['La presión', 'El volumen', 'La temperatura', 'La masa molar'], answer: 1, explain: 'Correcto: isocórica significa a volumen constante.' }
 		];
 		const SUPABASE_URL = 'https://upkayrgkhcuxvimmidgr.supabase.co';
 		const SUPABASE_KEY = 'sb_publishable_kSR7NWGjWdTvFwsryAUbmw_dd01X-75';
