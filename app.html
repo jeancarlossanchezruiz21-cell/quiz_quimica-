@@ -1,0 +1,336 @@
+<!doctype html>
+<html lang="es">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+	<meta name="theme-color" content="#f5f1e8">
+	<title>Quimio | Quiz de química</title>
+	<style>
+		:root {
+			--ink: #17211b;
+			--muted: #718077;
+			--paper: #f5f1e8;
+			--card: #fffdf8;
+			--mint: #cfe6d6;
+			--mint-strong: #2f7659;
+			--yellow: #f6c95f;
+			--coral: #df795f;
+			--line: #dfe4da;
+			--shadow: 0 18px 44px rgba(31, 58, 42, .11);
+		}
+
+		* { box-sizing: border-box; }
+		body {
+			margin: 0;
+			min-width: 320px;
+			color: var(--ink);
+			background: var(--paper);
+			font-family: Georgia, 'Times New Roman', serif;
+		}
+		button { font: inherit; }
+		.app {
+			min-height: 100svh;
+			padding: max(22px, env(safe-area-inset-top)) 20px max(24px, env(safe-area-inset-bottom));
+			background: radial-gradient(circle at 100% 0, #e4f0dd 0, transparent 32%), var(--paper);
+		}
+		.shell { width: min(100%, 540px); margin: 0 auto; }
+		.topbar, .stats, .question-meta, .actions, .result-row { display: flex; align-items: center; justify-content: space-between; }
+		.topbar { margin-bottom: 34px; }
+		.brand { display: flex; align-items: center; gap: 10px; font-weight: 700; letter-spacing: .02em; }
+		.mark { display: grid; place-items: center; width: 38px; height: 38px; border-radius: 13px; background: var(--ink); color: var(--yellow); font-size: 21px; transform: rotate(-8deg); }
+		.connection { display: inline-flex; align-items: center; gap: 7px; color: var(--muted); font: 700 11px Arial, sans-serif; text-transform: uppercase; letter-spacing: .08em; }
+		.dot { width: 8px; height: 8px; background: var(--mint-strong); border-radius: 50%; box-shadow: 0 0 0 4px #dcebdd; }
+		h1, h2, p { margin-top: 0; }
+		h1 { max-width: 430px; margin-bottom: 14px; font-size: clamp(39px, 11vw, 62px); line-height: .97; letter-spacing: -.045em; }
+		h1 em { color: var(--mint-strong); font-style: normal; }
+		.intro { max-width: 390px; margin-bottom: 28px; color: var(--muted); font: 16px/1.5 Arial, sans-serif; }
+		.feature-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 9px; margin-bottom: 25px; }
+		.feature { min-height: 96px; padding: 13px 12px; border: 1px solid var(--line); border-radius: 14px; background: rgba(255,253,248,.64); }
+		.feature b { display: block; margin-bottom: 9px; font-size: 23px; }
+		.feature span { color: var(--muted); font: 11px/1.2 Arial, sans-serif; }
+		.primary, .secondary { width: 100%; min-height: 56px; border: 0; border-radius: 15px; cursor: pointer; font-weight: 700; transition: transform .15s ease, box-shadow .15s ease; }
+		.primary { color: #fffdf8; background: var(--ink); box-shadow: 0 9px 0 #c9d7c8; }
+		.primary:active, .secondary:active { transform: translateY(3px); box-shadow: none; }
+		.secondary { margin-top: 12px; color: var(--ink); border: 1px solid var(--line); background: transparent; }
+		.screen[hidden] { display: none; }
+		.stats { margin-bottom: 18px; font: 700 12px Arial, sans-serif; letter-spacing: .06em; text-transform: uppercase; }
+		.timer { padding: 9px 11px; border-radius: 10px; background: var(--yellow); }
+		.progress-track { height: 7px; margin-bottom: 35px; border-radius: 10px; background: #dfe8dc; overflow: hidden; }
+		.progress-value { width: 20%; height: 100%; border-radius: inherit; background: var(--mint-strong); transition: width .3s ease; }
+		.question-meta { margin-bottom: 16px; color: var(--muted); font: 700 11px Arial, sans-serif; letter-spacing: .08em; text-transform: uppercase; }
+		.question-card { padding: 26px 20px 20px; border-radius: 22px; background: var(--card); box-shadow: var(--shadow); }
+		.question-card h2 { margin-bottom: 24px; font-size: clamp(24px, 7vw, 32px); line-height: 1.08; letter-spacing: -.025em; }
+		.answers { display: grid; gap: 10px; }
+		.answer { display: flex; align-items: center; gap: 12px; width: 100%; min-height: 54px; padding: 9px 12px; border: 1px solid var(--line); border-radius: 13px; color: var(--ink); background: #fff; cursor: pointer; text-align: left; }
+		.answer:disabled { cursor: default; }
+		.answer .letter { display: grid; flex: 0 0 32px; place-items: center; width: 32px; height: 32px; border-radius: 9px; background: #edf2eb; font: 700 13px Arial, sans-serif; }
+		.answer.correct { border-color: var(--mint-strong); background: #e8f4e9; }
+		.answer.correct .letter { color: #fff; background: var(--mint-strong); }
+		.answer.wrong { border-color: var(--coral); background: #fff0ea; }
+		.answer.wrong .letter { color: #fff; background: var(--coral); }
+		.answer span:last-child { font: 15px/1.25 Arial, sans-serif; }
+		.feedback { min-height: 25px; margin: 16px 2px 0; color: var(--mint-strong); font: 700 13px/1.35 Arial, sans-serif; }
+		.feedback.bad { color: var(--coral); }
+		.next { margin-top: 14px; }
+		.result-hero { margin: 20px 0 25px; text-align: center; }
+		.score-circle { display: grid; place-items: center; width: 142px; height: 142px; margin: 0 auto 20px; border: 10px solid var(--mint); border-radius: 50%; background: var(--card); font-size: 40px; font-weight: 700; }
+		.result-hero h2 { margin-bottom: 8px; font-size: 32px; }
+		.result-hero p { color: var(--muted); font: 15px Arial, sans-serif; }
+		.result-list { border-top: 1px solid var(--line); }
+		.result-row { padding: 14px 0; border-bottom: 1px solid var(--line); font: 14px Arial, sans-serif; }
+		.result-row strong { color: var(--mint-strong); }
+		.lock-note { margin-top: 16px; color: var(--muted); text-align: center; font: 11px/1.4 Arial, sans-serif; }
+		.lock { position: fixed; inset: 0; z-index: 5; display: grid; place-items: center; padding: 24px; background: rgba(23,33,27,.96); }
+		.lock[hidden] { display: none; }
+		.lock-card { width: min(100%, 390px); padding: 30px 24px; border-radius: 22px; color: #fffdf8; background: #283b31; text-align: center; box-shadow: var(--shadow); }
+		.lock-card .mark { margin: 0 auto 21px; background: var(--yellow); color: var(--ink); }
+		.lock-card h2 { margin-bottom: 12px; font-size: 29px; }
+		.lock-card p { margin-bottom: 0; color: #cbd8ce; font: 14px/1.5 Arial, sans-serif; }
+		.name-field { display: grid; gap: 8px; margin-bottom: 14px; }
+		.name-field label { color: var(--muted); font: 700 11px Arial, sans-serif; letter-spacing: .08em; text-transform: uppercase; }
+		.name-field input { width: 100%; min-height: 54px; padding: 0 15px; border: 1px solid var(--line); border-radius: 13px; color: var(--ink); background: var(--card); font: 16px Arial, sans-serif; outline: none; }
+		.name-field input:focus { border-color: var(--mint-strong); box-shadow: 0 0 0 3px var(--mint); }
+		.ranking { margin-top: 30px; }
+		.ranking-heading { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 10px; }
+		.ranking-heading h2 { margin: 0; font-size: 22px; }
+		.ranking-heading span { color: var(--muted); font: 11px Arial, sans-serif; }
+		.ranking-list { border-top: 1px solid var(--line); }
+		.ranking-item { display: grid; grid-template-columns: 30px 1fr auto; gap: 10px; align-items: center; padding: 11px 0; border-bottom: 1px solid var(--line); font: 14px Arial, sans-serif; }
+		.ranking-position { color: var(--muted); font-weight: 700; }
+		.ranking-name { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+		.ranking-score { color: var(--mint-strong); font-weight: 700; }
+		.ranking-empty { padding: 14px 0; color: var(--muted); font: 13px Arial, sans-serif; }
+		@media (min-width: 600px) { .app { padding-top: 42px; } }
+	</style>
+</head>
+<body>
+	<main class="app">
+		<div class="shell">
+			<header class="topbar">
+				<div class="brand"><span class="mark">⚗</span><span>QUIMIO</span></div>
+				<div class="connection"><span class="dot"></span><span id="connection-mode">Modo público</span></div>
+			</header>
+
+			<section id="start-screen" class="screen">
+				<h1>Piensa.<br><em>Reacciona.</em><br>Aprende.</h1>
+				<p class="intro">Un reto rápido para poner a prueba tus bases de química. Sin anuncios, sin distracciones y listo para jugar sin conexión.</p>
+				<div class="feature-grid">
+					<div class="feature"><b>10</b><span>preguntas</span></div>
+					<div class="feature"><b>12:00</b><span>tiempo máximo</span></div>
+					<div class="feature"><b>01</b><span>intento único</span></div>
+				</div>
+				<div class="name-field">
+					<label for="student-name">Tu nombre</label>
+					<input id="student-name" maxlength="30" autocomplete="name" placeholder="Escribe tu nombre" />
+				</div>
+				<button id="start-btn" class="primary">Comenzar quiz <span aria-hidden="true">→</span></button>
+				<p class="lock-note">Al comenzar, salir de esta pantalla finalizará el intento.</p>
+				<section class="ranking" aria-labelledby="ranking-title">
+					<div class="ranking-heading"><h2 id="ranking-title">Ranking</h2><span>Mejores puntuaciones</span></div>
+					<div id="ranking-list" class="ranking-list"><div class="ranking-empty">Cargando resultados...</div></div>
+				</section>
+			</section>
+
+			<section id="quiz-screen" class="screen" hidden>
+				<div class="stats"><span id="question-count">Pregunta 01 / 10</span><span id="timer" class="timer">12:00</span></div>
+				<div class="progress-track"><div id="progress" class="progress-value"></div></div>
+				<div class="question-meta"><span id="topic">Materia · Química</span><span id="points">+10 pts</span></div>
+				<article class="question-card">
+					<h2 id="question"></h2>
+					<div id="answers" class="answers"></div>
+					<p id="feedback" class="feedback" aria-live="polite"></p>
+					<button id="next-btn" class="primary next" hidden>Siguiente <span aria-hidden="true">→</span></button>
+				</article>
+			</section>
+
+			<section id="result-screen" class="screen" hidden>
+				<div class="result-hero">
+					<div id="score" class="score-circle">0%</div>
+					<h2>Quiz terminado</h2>
+					<p id="result-message">Tu intento quedó registrado.</p>
+				</div>
+				<div class="result-list">
+					<div class="result-row"><span>Respuestas correctas</span><strong id="correct-count">0 / 10</strong></div>
+					<div class="result-row"><span>Puntuación</span><strong id="final-points">0 puntos</strong></div>
+					<div class="result-row"><span>Estado</span><strong>Intento cerrado</strong></div>
+				</div>
+				<p id="ranking-status" class="lock-note">Guardando resultado en el ranking...</p>
+			</section>
+		</div>
+	</main>
+
+	<div id="lock-screen" class="lock" hidden>
+		<div class="lock-card">
+			<div class="mark">⚗</div>
+			<h2>Intento cerrado</h2>
+			<p>La sesión terminó porque la aplicación dejó de estar activa. Este quiz permite un solo intento por dispositivo.</p>
+		</div>
+	</div>
+
+	<script>
+		'use strict';
+		const questions = [
+			{ topic: 'Estructura', text: '¿Qué partícula subatómica tiene carga negativa?', options: ['Protón', 'Neutrón', 'Electrón', 'Núcleo'], answer: 2, explain: 'Correcto: el electrón tiene carga negativa.' },
+			{ topic: 'Materia', text: '¿Cuál es el símbolo químico del sodio?', options: ['So', 'Na', 'Sd', 'S'], answer: 1, explain: 'Correcto: Na viene del latín natrium.' },
+			{ topic: 'Enlaces', text: '¿Qué enlace se forma al compartir electrones?', options: ['Iónico', 'Metálico', 'Covalente', 'Nuclear'], answer: 2, explain: 'Correcto: los enlaces covalentes comparten electrones.' },
+			{ topic: 'Tabla periódica', text: '¿Cuál de estos elementos es un gas noble?', options: ['Cloro', 'Oxígeno', 'Neón', 'Carbono'], answer: 2, explain: 'Correcto: el neón pertenece al grupo de gases nobles.' },
+			{ topic: 'Medición', text: '¿Qué mide el pH de una disolución?', options: ['Su masa', 'Su acidez', 'Su volumen', 'Su densidad'], answer: 1, explain: 'Correcto: el pH indica la acidez o basicidad.' },
+			{ topic: 'Reacciones', text: '¿Qué gas se libera normalmente en una combustión?', options: ['Dióxido de carbono', 'Helio', 'Hidrógeno', 'Ozono'], answer: 0, explain: 'Correcto: una combustión produce dióxido de carbono.' },
+			{ topic: 'Materia', text: '¿Cuál es el estado del agua a 100 °C al nivel del mar?', options: ['Sólido', 'Líquido', 'Gaseoso', 'Plasma'], answer: 2, explain: 'Correcto: a esa temperatura hierve y pasa a gas.' },
+			{ topic: 'Cálculo químico', text: '¿Cuántos átomos de oxígeno hay en H₂O?', options: ['1', '2', '3', '0'], answer: 0, explain: 'Correcto: el subíndice 2 solo afecta al hidrógeno.' },
+			{ topic: 'Ácidos y bases', text: 'Una sustancia con pH 3 es...', options: ['Ácida', 'Neutra', 'Básica', 'Metálica'], answer: 0, explain: 'Correcto: los valores menores que 7 son ácidos.' },
+			{ topic: 'Laboratorio', text: '¿Qué instrumento mide con precisión un volumen líquido?', options: ['Balanza', 'Probeta', 'Termómetro', 'Mechero'], answer: 1, explain: 'Correcto: la probeta mide volúmenes de líquidos.' },
+			{ topic: 'Estructura', text: '¿Dónde se concentra casi toda la masa de un átomo?', options: ['En los electrones', 'En el núcleo', 'En la corteza', 'En los enlaces'], answer: 1, explain: 'Correcto: protones y neutrones están en el núcleo.' },
+			{ topic: 'Tabla periódica', text: '¿Qué información indica el número atómico?', options: ['Número de protones', 'Número de neutrones', 'Masa del átomo', 'Número de moléculas'], answer: 0, explain: 'Correcto: el número atómico es el número de protones.' },
+			{ topic: 'Materia', text: '¿Cuál es una propiedad intensiva?', options: ['Masa', 'Volumen', 'Densidad', 'Longitud'], answer: 2, explain: 'Correcto: la densidad no depende de la cantidad de materia.' },
+			{ topic: 'Reacciones', text: '¿Qué principio debe cumplirse al balancear una reacción?', options: ['Conservar los átomos', 'Cambiar los elementos', 'Eliminar productos', 'Duplicar el solvente'], answer: 0, explain: 'Correcto: los átomos se conservan en una reacción química.' },
+			{ topic: 'Enlaces', text: '¿Qué ion forma normalmente el cloro?', options: ['Cl+', 'Cl2+', 'Cl−', 'Cl2−'], answer: 2, explain: 'Correcto: el cloro gana un electrón y forma Cl−.' },
+			{ topic: 'Ácidos y bases', text: '¿Qué sustancia puede cambiar el color de un indicador?', options: ['Una solución ácida o básica', 'Un metal sólido', 'Un gas noble', 'Una mezcla homogénea neutra'], answer: 0, explain: 'Correcto: los ácidos y las bases cambian el color de los indicadores.' },
+			{ topic: 'Gases', text: 'Si aumenta la temperatura de un gas a presión constante, su volumen...', options: ['Disminuye', 'Aumenta', 'Desaparece', 'No puede medirse'], answer: 1, explain: 'Correcto: el volumen aumenta con la temperatura.' },
+			{ topic: 'Separación', text: '¿Qué método separa un sólido insoluble de un líquido?', options: ['Filtración', 'Destilación', 'Cromatografía', 'Fusión'], answer: 0, explain: 'Correcto: la filtración retiene el sólido y deja pasar el líquido.' },
+			{ topic: 'Medición', text: '¿Cuál es la unidad básica de cantidad de sustancia?', options: ['Gramo', 'Litro', 'Mol', 'Kelvin'], answer: 2, explain: 'Correcto: el mol es la unidad de cantidad de sustancia.' },
+			{ topic: 'Laboratorio', text: '¿Qué equipo se usa para proteger los ojos?', options: ['Guantes', 'Gafas de seguridad', 'Bata', 'Pinzas'], answer: 1, explain: 'Correcto: las gafas protegen los ojos de salpicaduras.' }
+		];
+		const state = { current: 0, correct: 0, answered: false, started: false, remaining: 720, timer: null, studentName: '', exam: [] };
+		const $ = (id) => document.getElementById(id);
+		const screens = ['start-screen', 'quiz-screen', 'result-screen'];
+		const show = (id) => screens.forEach((screen) => $(screen).hidden = screen !== id);
+		if (['localhost', '127.0.0.1'].includes(window.location.hostname)) $('connection-mode').textContent = 'Modo local';
+
+		function createDailyRandom() {
+			const dailyCycle = Math.floor(Date.now() / (24 * 60 * 60 * 1000));
+			let seed = dailyCycle + 0x6D2B79F5;
+			return () => {
+				seed = Math.imul(seed ^ (seed >>> 15), seed | 1);
+				seed ^= seed + Math.imul(seed ^ (seed >>> 7), seed | 61);
+				return ((seed ^ (seed >>> 14)) >>> 0) / 4294967296;
+			};
+		}
+
+		function shuffle(items, random = Math.random) {
+			const shuffled = [...items];
+			for (let index = shuffled.length - 1; index > 0; index--) {
+				const randomIndex = Math.floor(random() * (index + 1));
+				[shuffled[index], shuffled[randomIndex]] = [shuffled[randomIndex], shuffled[index]];
+			}
+			return shuffled;
+		}
+
+		function createExam() {
+			const random = createDailyRandom();
+			state.exam = shuffle(questions, random).slice(0, 10).map((question) => {
+				const options = shuffle(question.options.map((text, index) => ({ text, correct: index === question.answer })), random);
+				return { ...question, options: options.map((option) => option.text), answer: options.findIndex((option) => option.correct) };
+			});
+		}
+
+		function renderRanking(entries) {
+			if (!entries.length) { $('ranking-list').innerHTML = '<div class="ranking-empty">Aún no hay resultados. Sé el primero.</div>'; return; }
+			$('ranking-list').innerHTML = entries.slice(0, 10).map((entry, index) => `<div class="ranking-item"><span class="ranking-position">${index + 1}.</span><span class="ranking-name">${escapeHtml(entry.name)}</span><span class="ranking-score">${entry.points} pts</span></div>`).join('');
+		}
+
+		function escapeHtml(value) {
+			return value.replace(/[&<>'"]/g, (character) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' })[character]);
+		}
+
+		async function loadRanking() {
+			try {
+				const response = await fetch('/api/ranking');
+				if (!response.ok) throw new Error('ranking unavailable');
+				renderRanking(await response.json());
+			} catch (error) {
+				$('ranking-list').innerHTML = '<div class="ranking-empty">El ranking aparecerá cuando el servidor esté conectado.</div>';
+			}
+		}
+
+		async function saveResult(points) {
+			try {
+				const response = await fetch('/api/ranking', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ name: state.studentName, points, correct: state.correct }) });
+				if (!response.ok) throw new Error('result not saved');
+				$('ranking-status').textContent = 'Resultado guardado en el ranking compartido.';
+			} catch (error) {
+				$('ranking-status').textContent = 'No se pudo sincronizar el ranking. Revisa la conexión con el servidor.';
+			}
+		}
+
+		function renderQuestion() {
+			const item = state.exam[state.current];
+			$('question-count').textContent = `Pregunta ${String(state.current + 1).padStart(2, '0')} / ${state.exam.length}`;
+			$('progress').style.width = `${((state.current + 1) / state.exam.length) * 100}%`;
+			$('topic').textContent = `Materia · ${item.topic}`;
+			$('question').textContent = item.text;
+			$('feedback').textContent = '';
+			$('feedback').className = 'feedback';
+			$('next-btn').hidden = true;
+			$('answers').innerHTML = item.options.map((option, index) => `<button class="answer" data-index="${index}"><span class="letter">${String.fromCharCode(65 + index)}</span><span>${option}</span></button>`).join('');
+			document.querySelectorAll('.answer').forEach((button) => button.addEventListener('click', () => chooseAnswer(Number(button.dataset.index))));
+		}
+
+		function chooseAnswer(selected) {
+			if (state.answered) return;
+			state.answered = true;
+			const item = state.exam[state.current];
+			document.querySelectorAll('.answer').forEach((button, index) => {
+				button.disabled = true;
+				if (index === item.answer) button.classList.add('correct');
+				if (index === selected && selected !== item.answer) button.classList.add('wrong');
+			});
+			if (selected === item.answer) { state.correct++; $('feedback').textContent = item.explain; }
+			else { $('feedback').textContent = `No esta vez. ${item.options[item.answer]} era la respuesta correcta.`; $('feedback').classList.add('bad'); }
+			$('next-btn').hidden = false;
+			$('next-btn').textContent = state.current === state.exam.length - 1 ? 'Ver resultado →' : 'Siguiente →';
+		}
+
+		function finish() {
+			clearInterval(state.timer);
+			localStorage.setItem('quimio_completed', 'true');
+			const percentage = Math.round((state.correct / state.exam.length) * 100);
+			$('score').textContent = `${percentage}%`;
+			$('correct-count').textContent = `${state.correct} / ${state.exam.length}`;
+			$('final-points').textContent = `${state.correct * 10} puntos`;
+			$('result-message').textContent = percentage >= 70 ? 'Buen trabajo: tu base química está reaccionando bien.' : 'Sigue practicando: cada error es una pista para aprender.';
+			show('result-screen');
+			saveResult(state.correct * 10);
+		}
+
+		function tick() {
+			state.remaining--;
+			const minutes = Math.floor(state.remaining / 60);
+			const seconds = state.remaining % 60;
+			$('timer').textContent = `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+			if (state.remaining <= 0) finish();
+		}
+
+		function lockAttempt() {
+			if (!state.started || localStorage.getItem('quimio_completed') === 'true') return;
+			state.started = false;
+			clearInterval(state.timer);
+			localStorage.setItem('quimio_completed', 'true');
+			$('lock-screen').hidden = false;
+		}
+
+		$('start-btn').addEventListener('click', () => {
+			if (localStorage.getItem('quimio_completed') === 'true') { $('lock-screen').hidden = false; return; }
+			const name = $('student-name').value.trim();
+			if (name.length < 2) { $('student-name').focus(); $('student-name').setCustomValidity('Escribe tu nombre para continuar.'); $('student-name').reportValidity(); return; }
+			$('student-name').setCustomValidity('');
+			state.studentName = name;
+			createExam();
+			state.started = true;
+			show('quiz-screen');
+			renderQuestion();
+			state.timer = setInterval(tick, 1000);
+			document.documentElement.requestFullscreen?.().catch(() => {});
+		});
+		$('next-btn').addEventListener('click', () => {
+			if (state.current === state.exam.length - 1) finish();
+			else { state.current++; state.answered = false; renderQuestion(); }
+		});
+		document.addEventListener('visibilitychange', () => { if (document.hidden) lockAttempt(); });
+		window.addEventListener('pagehide', lockAttempt);
+		window.addEventListener('beforeunload', (event) => { if (state.started) { event.preventDefault(); event.returnValue = ''; } });
+		if (localStorage.getItem('quimio_completed') === 'true') $('start-btn').textContent = 'Intento ya utilizado';
+		loadRanking();
+	</script>
+</body>
+</html>
