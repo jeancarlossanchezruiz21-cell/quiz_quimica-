@@ -118,8 +118,8 @@
 					<div class="feature"><b>01</b><span>intento único</span></div>
 				</div>
 				<div class="name-field">
-					<label for="student-name">Tu nombre</label>
-					<input id="student-name" maxlength="30" autocomplete="name" placeholder="Escribe tu nombre" />
+					<label for="student-name">Nombre completo</label>
+					<input id="student-name" maxlength="30" autocomplete="name" placeholder="Nombre y apellido" />
 				</div>
 				<button id="start-btn" class="primary">Comenzar quiz <span aria-hidden="true">→</span></button>
 				<p class="lock-note">Al comenzar, salir de esta pantalla finalizará el intento.</p>
@@ -220,6 +220,23 @@
 
 		function escapeHtml(value) {
 			return value.replace(/[&<>'"]/g, (character) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' })[character]);
+		}
+
+		function normalizeName(name) {
+			return name.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().replace(/\s+/g, ' ').trim();
+		}
+
+		function isFullName(name) {
+			return /^[\p{L}]+(?:[ '-][\p{L}]+)+(?:\s+[\p{L}]+(?:[ '-][\p{L}]+)+)*$/u.test(name);
+		}
+
+		async function nameHasAttempted(name) {
+			const response = await fetch(`${SUPABASE_URL}/rest/v1/participation_events?select=name,status&limit=1000`, {
+				headers: { apikey: SUPABASE_KEY, Authorization: `Bearer ${SUPABASE_KEY}` }
+			});
+			if (!response.ok) throw new Error('participation unavailable');
+			const entries = await response.json();
+			return entries.some((entry) => normalizeName(entry.name) === normalizeName(name));
 		}
 
 		async function loadRanking() {
@@ -323,8 +340,22 @@
 
 		$('start-btn').addEventListener('click', async () => {
 			const name = $('student-name').value.trim();
-			if (name.length < 2) { $('student-name').focus(); $('student-name').setCustomValidity('Escribe tu nombre para continuar.'); $('student-name').reportValidity(); return; }
+			if (!isFullName(name)) { $('student-name').focus(); $('student-name').setCustomValidity('Escribe tu nombre y apellido completos.'); $('student-name').reportValidity(); return; }
 			$('student-name').setCustomValidity('');
+			$('start-btn').disabled = true;
+			try {
+				if (await nameHasAttempted(name)) {
+					$('student-name').setCustomValidity('Este nombre ya tiene un intento registrado. Usa tu nombre completo correcto.');
+					$('student-name').reportValidity();
+					return;
+				}
+			} catch (error) {
+				$('student-name').setCustomValidity('No se pudo verificar el registro. Intenta de nuevo.');
+				$('student-name').reportValidity();
+				return;
+			} finally {
+				$('start-btn').disabled = false;
+			}
 			state.studentName = name;
 			state.sessionId = crypto.randomUUID();
 			state.eventSaved = false;
