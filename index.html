@@ -124,7 +124,7 @@
 				<button id="start-btn" class="primary">Comenzar quiz <span aria-hidden="true">→</span></button>
 				<p class="lock-note">Al comenzar, salir de esta pantalla finalizará el intento.</p>
 				<section class="ranking" aria-labelledby="ranking-title">
-					<div class="ranking-heading"><h2 id="ranking-title">Ranking</h2><span>Mejores puntuaciones</span></div>
+					<div class="ranking-heading"><h2 id="ranking-title">Ranking</h2><span id="participant-count">0 ingresos</span></div>
 					<div id="ranking-list" class="ranking-list"><div class="ranking-empty">Cargando resultados...</div></div>
 				</section>
 			</section>
@@ -252,12 +252,26 @@
 		function saveParticipation(status) {
 			if (!state.sessionId || state.eventSaved && status === 'abandoned') return;
 			if (status === 'abandoned') state.eventSaved = true;
-			fetch(`${SUPABASE_URL}/rest/v1/participation_events`, {
+			return fetch(`${SUPABASE_URL}/rest/v1/participation_events`, {
 				method: 'POST',
 				keepalive: true,
 				headers: { apikey: SUPABASE_KEY, Authorization: `Bearer ${SUPABASE_KEY}`, 'Content-Type': 'application/json', Prefer: 'return=minimal' },
 				body: JSON.stringify({ session_id: state.sessionId, name: state.studentName, status, question_number: state.current })
 			}).catch(() => {});
+		}
+
+		async function loadParticipationCount() {
+			try {
+				const response = await fetch(`${SUPABASE_URL}/rest/v1/participation_events?select=id&status=eq.registered`, {
+					headers: { apikey: SUPABASE_KEY, Authorization: `Bearer ${SUPABASE_KEY}`, Prefer: 'count=exact' }
+				});
+				if (!response.ok) throw new Error('count unavailable');
+				const range = response.headers.get('content-range');
+				const count = range ? Number(range.split('/')[1]) : (await response.json()).length;
+				$('participant-count').textContent = `${count} ${count === 1 ? 'ingreso' : 'ingresos'}`;
+			} catch (error) {
+				$('participant-count').textContent = 'Ingresos no disponibles';
+			}
 		}
 
 		function renderQuestion() {
@@ -307,14 +321,15 @@
 			$('lock-screen').hidden = false;
 		}
 
-		$('start-btn').addEventListener('click', () => {
+		$('start-btn').addEventListener('click', async () => {
 			const name = $('student-name').value.trim();
 			if (name.length < 2) { $('student-name').focus(); $('student-name').setCustomValidity('Escribe tu nombre para continuar.'); $('student-name').reportValidity(); return; }
 			$('student-name').setCustomValidity('');
 			state.studentName = name;
 			state.sessionId = crypto.randomUUID();
 			state.eventSaved = false;
-			saveParticipation('registered');
+			await saveParticipation('registered');
+			loadParticipationCount();
 			createExam();
 			state.started = true;
 			show('quiz-screen');
@@ -338,6 +353,7 @@
 		window.addEventListener('pagehide', lockAttempt);
 		window.addEventListener('beforeunload', (event) => { if (state.started) { event.preventDefault(); event.returnValue = ''; } });
 		loadRanking();
+		loadParticipationCount();
 	</script>
 </body>
 </html>
