@@ -116,7 +116,7 @@
 				<p class="intro">Un reto rápido para poner a prueba tus bases de química. Sin anuncios, sin distracciones y listo para jugar sin conexión.</p>
 				<div class="feature-grid">
 					<div class="feature"><b>10</b><span>preguntas</span></div>
-					<div class="feature"><b>12:00</b><span>tiempo máximo</span></div>
+					<div class="feature"><b>10:00</b><span>tiempo máximo</span></div>
 					<div class="feature"><b>01</b><span>intento único</span></div>
 				</div>
 				<div class="name-field">
@@ -132,7 +132,7 @@
 			</section>
 
 			<section id="quiz-screen" class="screen" hidden>
-				<div class="stats"><span id="question-count">Pregunta 01 / 10</span><span id="timer" class="timer">12:00</span></div>
+				<div class="stats"><span id="question-count">Pregunta 01 / 10</span><span id="timer" class="timer">10:00</span></div>
 				<div class="progress-track"><div id="progress" class="progress-value"></div></div>
 				<div class="question-meta"><span id="topic">Materia · Química</span><span id="points">+10 pts</span></div>
 				<article class="question-card">
@@ -191,6 +191,8 @@
 			{ topic: 'Medición', text: '¿Cuál es la unidad básica de cantidad de sustancia?', options: ['Gramo', 'Litro', 'Mol', 'Kelvin'], answer: 2, explain: 'Correcto: el mol es la unidad de cantidad de sustancia.' },
 			{ topic: 'Laboratorio', text: '¿Qué equipo se usa para proteger los ojos?', options: ['Guantes', 'Gafas de seguridad', 'Bata', 'Pinzas'], answer: 1, explain: 'Correcto: las gafas protegen los ojos de salpicaduras.' }
 		];
+		const SUPABASE_URL = 'https://upkayrgkhcuxvimmidgr.supabase.co';
+		const SUPABASE_KEY = 'sb_publishable_kSR7NWGjWdTvFwsryAUbmw_dd01X-75';
 		const state = { current: 0, correct: 0, answered: false, started: false, remaining: 720, timer: null, studentName: '', exam: [] };
 		const $ = (id) => document.getElementById(id);
 		const screens = ['start-screen', 'quiz-screen', 'result-screen'];
@@ -235,17 +237,23 @@
 
 		async function loadRanking() {
 			try {
-				const response = await fetch('/api/ranking');
+				const response = await fetch(`${SUPABASE_URL}/rest/v1/ranking?select=name,points,correct,created_at&order=points.desc,correct.desc,created_at.asc&limit=10`, {
+					headers: { apikey: SUPABASE_KEY, Authorization: `Bearer ${SUPABASE_KEY}` }
+				});
 				if (!response.ok) throw new Error('ranking unavailable');
 				renderRanking(await response.json());
 			} catch (error) {
-				$('ranking-list').innerHTML = '<div class="ranking-empty">El ranking aparecerá cuando el servidor esté conectado.</div>';
+				$('ranking-list').innerHTML = '<div class="ranking-empty">Configura Supabase para activar el ranking.</div>';
 			}
 		}
 
 		async function saveResult(points) {
 			try {
-				const response = await fetch('/api/ranking', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ name: state.studentName, points, correct: state.correct }) });
+				const response = await fetch(`${SUPABASE_URL}/rest/v1/ranking`, {
+					method: 'POST',
+					headers: { apikey: SUPABASE_KEY, Authorization: `Bearer ${SUPABASE_KEY}`, 'Content-Type': 'application/json', Prefer: 'return=minimal' },
+					body: JSON.stringify({ name: state.studentName, points, correct: state.correct })
+				});
 				if (!response.ok) throw new Error('result not saved');
 				$('ranking-status').textContent = 'Resultado guardado en el ranking compartido.';
 			} catch (error) {
