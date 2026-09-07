@@ -54,7 +54,6 @@
 		.secondary { margin-top: 12px; color: var(--ink); border: 1px solid var(--line); background: transparent; }
 		.screen[hidden] { display: none; }
 		.stats { margin-bottom: 18px; font: 700 12px Arial, sans-serif; letter-spacing: .06em; text-transform: uppercase; }
-		.timer { padding: 9px 11px; border-radius: 10px; background: var(--yellow); }
 		.progress-track { height: 7px; margin-bottom: 35px; border-radius: 10px; background: #dfe8dc; overflow: hidden; }
 		.progress-value { width: 20%; height: 100%; border-radius: inherit; background: var(--mint-strong); transition: width .3s ease; }
 		.question-meta { margin-bottom: 16px; color: var(--muted); font: 700 11px Arial, sans-serif; letter-spacing: .08em; text-transform: uppercase; }
@@ -116,7 +115,6 @@
 				<p class="intro">Un reto rápido para poner a prueba tus bases de química. Sin anuncios, sin distracciones y listo para jugar sin conexión.</p>
 				<div class="feature-grid">
 					<div class="feature"><b>10</b><span>preguntas</span></div>
-					<div class="feature"><b>10:00</b><span>tiempo máximo</span></div>
 					<div class="feature"><b>01</b><span>intento único</span></div>
 				</div>
 				<div class="name-field">
@@ -132,7 +130,7 @@
 			</section>
 
 			<section id="quiz-screen" class="screen" hidden>
-				<div class="stats"><span id="question-count">Pregunta 01 / 10</span><span id="timer" class="timer">10:00</span></div>
+				<div class="stats"><span id="question-count">Pregunta 01 / 10</span></div>
 				<div class="progress-track"><div id="progress" class="progress-value"></div></div>
 				<div class="question-meta"><span id="topic">Materia · Química</span><span id="points">+10 pts</span></div>
 				<article class="question-card">
@@ -193,7 +191,7 @@
 		];
 		const SUPABASE_URL = 'https://upkayrgkhcuxvimmidgr.supabase.co';
 		const SUPABASE_KEY = 'sb_publishable_kSR7NWGjWdTvFwsryAUbmw_dd01X-75';
-		const state = { current: 0, correct: 0, answered: false, started: false, remaining: 720, timer: null, studentName: '', exam: [] };
+		const state = { current: 0, correct: 0, answered: false, started: false, studentName: '', exam: [] };
 		const $ = (id) => document.getElementById(id);
 		const screens = ['start-screen', 'quiz-screen', 'result-screen'];
 		const show = (id) => screens.forEach((screen) => $(screen).hidden = screen !== id);
@@ -290,7 +288,6 @@
 		}
 
 		function finish() {
-			clearInterval(state.timer);
 			localStorage.setItem('quimio_completed', 'true');
 			const percentage = Math.round((state.correct / state.exam.length) * 100);
 			$('score').textContent = `${percentage}%`;
@@ -301,18 +298,9 @@
 			saveResult(state.correct * 10);
 		}
 
-		function tick() {
-			state.remaining--;
-			const minutes = Math.floor(state.remaining / 60);
-			const seconds = state.remaining % 60;
-			$('timer').textContent = `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
-			if (state.remaining <= 0) finish();
-		}
-
 		function lockAttempt() {
 			if (!state.started || localStorage.getItem('quimio_completed') === 'true') return;
 			state.started = false;
-			clearInterval(state.timer);
 			localStorage.setItem('quimio_completed', 'true');
 			$('lock-screen').hidden = false;
 		}
@@ -327,7 +315,6 @@
 			state.started = true;
 			show('quiz-screen');
 			renderQuestion();
-			state.timer = setInterval(tick, 1000);
 			document.documentElement.requestFullscreen?.().catch(() => {});
 		});
 		$('next-btn').addEventListener('click', () => {
