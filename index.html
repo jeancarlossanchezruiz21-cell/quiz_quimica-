@@ -188,8 +188,6 @@
 			{ topic: 'Estequiometría con gases', text: 'En N₂ + 3H₂ → 2NH₃, reaccionan 3 mol de H₂. ¿Qué volumen de NH₃ se forma a 2 atm y 300 K? Usa PV = nRT.', options: ['12,3 L', '24,6 L', '36,9 L', '49,2 L'], answer: 1, explain: 'Correcto: 3 mol de H₂ forman 2 mol de NH₃; V = 2 × 0,082 × 300 / 2 = 24,6 L.' },
 			{ topic: 'Estequiometría con gases', text: 'En CH₄ + 2O₂ → CO₂ + 2H₂O(g), reaccionan 2 mol de CH₄. ¿Qué volumen de O₂ se requiere a 1,5 atm y 300 K? Usa PV = nRT.', options: ['32,8 L', '49,2 L', '65,6 L', '98,4 L'], answer: 2, explain: 'Correcto: 2 mol de CH₄ requieren 4 mol de O₂; V = 4 × 0,082 × 300 / 1,5 = 65,6 L.' }
 		];
-		const SUPABASE_URL = 'https://upkayrgkhcuxvimmidgr.supabase.co';
-		const SUPABASE_KEY = 'sb_publishable_kSR7NWGjWdTvFwsryAUbmw_dd01X-75';
 		const state = { current: 0, correct: 0, answered: false, started: false, fullscreenActive: false, studentName: '', sessionId: '', eventSaved: false, exam: [] };
 		const $ = (id) => document.getElementById(id);
 		const screens = ['start-screen', 'quiz-screen', 'result-screen'];
@@ -231,9 +229,7 @@
 		}
 
 		async function nameHasAttempted(name) {
-			const response = await fetch(`${SUPABASE_URL}/rest/v1/participation_events?select=name,status&limit=1000`, {
-				headers: { apikey: SUPABASE_KEY, Authorization: `Bearer ${SUPABASE_KEY}` }
-			});
+			const response = await fetch('/api/participation');
 			if (!response.ok) throw new Error('participation unavailable');
 			const entries = await response.json();
 			return entries.some((entry) => normalizeName(entry.name) === normalizeName(name));
@@ -241,9 +237,7 @@
 
 		async function loadRanking() {
 			try {
-				const response = await fetch(`${SUPABASE_URL}/rest/v1/ranking?select=name,points,correct,created_at&order=points.desc,correct.desc,created_at.desc&limit=50`, {
-					headers: { apikey: SUPABASE_KEY, Authorization: `Bearer ${SUPABASE_KEY}` }
-				});
+				const response = await fetch('/api/ranking');
 				if (!response.ok) throw new Error('ranking unavailable');
 				renderRanking(await response.json());
 			} catch (error) {
@@ -253,9 +247,9 @@
 
 		async function saveResult(points) {
 			try {
-				const response = await fetch(`${SUPABASE_URL}/rest/v1/ranking`, {
+				const response = await fetch('/api/ranking', {
 					method: 'POST',
-					headers: { apikey: SUPABASE_KEY, Authorization: `Bearer ${SUPABASE_KEY}`, 'Content-Type': 'application/json', Prefer: 'return=minimal' },
+					headers: { 'Content-Type': 'application/json' },
 					body: JSON.stringify({ name: state.studentName, points, correct: state.correct })
 				});
 				if (!response.ok) throw new Error('result not saved');
@@ -269,22 +263,20 @@
 		function saveParticipation(status) {
 			if (!state.sessionId || state.eventSaved && status === 'abandoned') return;
 			if (status === 'abandoned') state.eventSaved = true;
-			return fetch(`${SUPABASE_URL}/rest/v1/participation_events`, {
+			return fetch('/api/participation', {
 				method: 'POST',
 				keepalive: true,
-				headers: { apikey: SUPABASE_KEY, Authorization: `Bearer ${SUPABASE_KEY}`, 'Content-Type': 'application/json', Prefer: 'return=minimal' },
+				headers: { 'Content-Type': 'application/json' },
 				body: JSON.stringify({ session_id: state.sessionId, name: state.studentName, status, question_number: state.current })
 			}).catch(() => {});
 		}
 
 		async function loadParticipationCount() {
 			try {
-				const response = await fetch(`${SUPABASE_URL}/rest/v1/participation_events?select=id&status=eq.registered`, {
-					headers: { apikey: SUPABASE_KEY, Authorization: `Bearer ${SUPABASE_KEY}`, Prefer: 'count=exact' }
-				});
+				const response = await fetch('/api/participation');
 				if (!response.ok) throw new Error('count unavailable');
-				const range = response.headers.get('content-range');
-				const count = range ? Number(range.split('/')[1]) : (await response.json()).length;
+				const entries = await response.json();
+				const count = entries.filter((entry) => entry.status === 'registered').length;
 				$('participant-count').textContent = `${count} ${count === 1 ? 'ingreso' : 'ingresos'}`;
 			} catch (error) {
 				$('participant-count').textContent = 'Ingresos no disponibles';
