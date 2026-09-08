@@ -190,7 +190,7 @@
 		];
 		const SUPABASE_URL = 'https://upkayrgkhcuxvimmidgr.supabase.co';
 		const SUPABASE_KEY = 'sb_publishable_kSR7NWGjWdTvFwsryAUbmw_dd01X-75';
-		const state = { current: 0, correct: 0, answered: false, started: false, studentName: '', sessionId: '', eventSaved: false, exam: [] };
+		const state = { current: 0, correct: 0, answered: false, started: false, fullscreenActive: false, studentName: '', sessionId: '', eventSaved: false, exam: [] };
 		const $ = (id) => document.getElementById(id);
 		const screens = ['start-screen', 'quiz-screen', 'result-screen'];
 		const show = (id) => screens.forEach((screen) => $(screen).hidden = screen !== id);
@@ -365,7 +365,9 @@
 			state.started = true;
 			show('quiz-screen');
 			renderQuestion();
-			document.documentElement.requestFullscreen?.().catch(() => {});
+			if (document.documentElement.requestFullscreen) {
+				document.documentElement.requestFullscreen().then(() => { state.fullscreenActive = true; }).catch(() => {});
+			}
 		});
 		$('restart-btn').addEventListener('click', () => {
 			state.current = 0;
@@ -380,9 +382,21 @@
 			if (state.current === state.exam.length - 1) finish();
 			else { state.current++; state.answered = false; renderQuestion(); }
 		});
+		document.addEventListener('fullscreenchange', () => {
+			if (state.started && state.fullscreenActive && !document.fullscreenElement) lockAttempt();
+		});
 		document.addEventListener('visibilitychange', () => { if (document.hidden) lockAttempt(); });
 		window.addEventListener('pagehide', lockAttempt);
 		window.addEventListener('beforeunload', (event) => { if (state.started) { event.preventDefault(); event.returnValue = ''; } });
+		document.addEventListener('contextmenu', (event) => { if (state.started) event.preventDefault(); });
+		document.addEventListener('copy', (event) => { if (state.started) event.preventDefault(); });
+		document.addEventListener('cut', (event) => { if (state.started) event.preventDefault(); });
+		document.addEventListener('paste', (event) => { if (state.started) event.preventDefault(); });
+		document.addEventListener('keydown', (event) => {
+			if (!state.started) return;
+			const blockedShortcut = event.key === 'F12' || (event.ctrlKey && event.shiftKey && ['I', 'J', 'C'].includes(event.key.toUpperCase())) || (event.ctrlKey && ['U', 'S', 'P'].includes(event.key.toUpperCase()));
+			if (blockedShortcut) event.preventDefault();
+		});
 		loadRanking();
 		loadParticipationCount();
 	</script>
