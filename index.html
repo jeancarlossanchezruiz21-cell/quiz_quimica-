@@ -228,6 +228,15 @@
 			return /^[\p{L}]+(?:[ '-][\p{L}]+)+(?:\s+[\p{L}]+(?:[ '-][\p{L}]+)+)*$/u.test(name);
 		}
 
+		function createSessionId() {
+			if (crypto.randomUUID) return crypto.randomUUID();
+			return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, (character) => {
+				const random = Math.random() * 16 | 0;
+				const value = character === 'x' ? random : random & 3 | 8;
+				return value.toString(16);
+			});
+		}
+
 		async function nameHasAttempted(name) {
 			const response = await fetch('/api/participation');
 			if (!response.ok) throw new Error('participation unavailable');
@@ -349,7 +358,7 @@
 				$('start-btn').disabled = false;
 			}
 			state.studentName = name;
-			state.sessionId = crypto.randomUUID();
+			state.sessionId = createSessionId();
 			state.eventSaved = false;
 			await saveParticipation('registered');
 			loadParticipationCount();
