@@ -4,7 +4,7 @@
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 	<meta name="theme-color" content="#f5f1e8">
-	<title>Quimio | Quiz de química</title>
+	<title>Quimio | Quiz de Cinemática y Energía</title>
 	<style>
 		:root {
 			--ink: #17211b;
@@ -112,9 +112,9 @@
 
 			<section id="start-screen" class="screen">
 				<h1>Piensa.<br><em>Reacciona.</em><br>Aprende.</h1>
-				<p class="intro">Un reto rápido sobre las leyes de Boyle y Gay-Lussac, la estequiometría de gases y la ecuación PV = nRT.</p>
+				<p class="intro">Un reto rápido sobre cinemática, trabajo y conservación de la energía mecánica. Resuelve problemas de movimiento y fuerzas.</p>
 				<div class="feature-grid">
-					<div class="feature"><b>10</b><span>preguntas</span></div>
+					<div class="feature"><b>5</b><span>preguntas</span></div>
 					<div class="feature"><b>01</b><span>intento único</span></div>
 				</div>
 				<div class="name-field">
@@ -173,26 +173,11 @@
 	<script>
 		'use strict';
 		const questions = [
-			{ topic: 'Gases ideales', text: '¿Cuál es la ecuación de estado de un gas ideal?', options: ['PV = nRT', 'P = mV', 'V = n + RT', 'PT = nR'], answer: 0, explain: 'Correcto: la ecuación de los gases ideales es PV = nRT.' },
-			{ topic: 'Conversión de unidades', text: 'Convierte 27 °C a kelvin.', options: ['246 K', '273 K', '300 K', '327 K'], answer: 2, explain: 'Correcto: K = °C + 273,15; 27 °C = 300,15 K, aproximadamente 300 K.' },
-			{ topic: 'Conversión de unidades', text: '¿A cuántos litros equivalen 2500 mL?', options: ['0,25 L', '2,5 L', '25 L', '250 L'], answer: 1, explain: 'Correcto: 1000 mL = 1 L, por eso 2500 mL = 2,5 L.' },
-			{ topic: 'Ejercicio PV = nRT', text: 'Ejercicio: ¿qué volumen ocupan 2 mol de gas a 1 atm y 300 K? Usa R = 0,082 L·atm/(mol·K).', options: ['24,6 L', '49,2 L', '73,8 L', '98,4 L'], answer: 1, explain: 'Correcto: V = nRT/P = 2 × 0,082 × 300 / 1 = 49,2 L.' },
-			{ topic: 'Presión', text: '¿Qué unidad de presión es equivalente a 1 atm aproximadamente?', options: ['101,3 kPa', '1,013 kPa', '760 kPa', '10,13 kPa'], answer: 0, explain: 'Correcto: 1 atm equivale aproximadamente a 101,3 kPa.' },
-			{ topic: 'Temperatura', text: '¿Qué temperatura absoluta se usa en PV = nRT?', options: ['Celsius', 'Fahrenheit', 'Kelvin', 'Cualquier escala'], answer: 2, explain: 'Correcto: la temperatura debe expresarse en kelvin.' },
-			{ topic: 'Volumen molar', text: 'A 1 atm y 273 K, un mol de gas ideal ocupa aproximadamente...', options: ['1 L', '11,2 L', '22,4 L', '44,8 L'], answer: 2, explain: 'Correcto: en condiciones normales, 1 mol ocupa aproximadamente 22,4 L.' },
-			{ topic: 'Ejercicio PV = nRT', text: 'Ejercicio: un gas ocupa 24,6 L a 1 atm y 300 K. ¿Cuántos moles contiene? Usa R = 0,082 L·atm/(mol·K).', options: ['0,5 mol', '1 mol', '2 mol', '3 mol'], answer: 1, explain: 'Correcto: n = PV/RT = 1 × 24,6 / (0,082 × 300) = 1 mol.' },
-			{ topic: 'Ley de Boyle', text: 'A temperatura constante, si el volumen de un gas se reduce a la mitad, su presión...', options: ['Se reduce a la mitad', 'Se duplica', 'No cambia', 'Se vuelve cero'], answer: 1, explain: 'Correcto: según Boyle, P₁V₁ = P₂V₂; al reducir V a la mitad, P se duplica.' },
-			{ topic: 'Ley de Gay-Lussac', text: 'En un recipiente rígido, si la temperatura absoluta se duplica, la presión...', options: ['Se reduce a la mitad', 'Se duplica', 'No cambia', 'Se cuadruplica siempre'], answer: 1, explain: 'Correcto: a volumen constante, P/T es constante.' },
-			{ topic: 'Cantidad de gas', text: 'En PV = nRT, si aumentan los moles y P y T permanecen constantes, el volumen...', options: ['Aumenta', 'Disminuye', 'No cambia', 'Se vuelve negativo'], answer: 0, explain: 'Correcto: a P y T constantes, el volumen es directamente proporcional a n.' },
-			{ topic: 'Ejercicio PV = nRT', text: 'Ejercicio: calcula la presión de 1 mol en 24,6 L a 300 K. Usa R = 0,082 L·atm/(mol·K).', options: ['0,5 atm', '1 atm', '2 atm', '24,6 atm'], answer: 1, explain: 'Correcto: P = nRT/V = 1 × 0,082 × 300 / 24,6 = 1 atm.' },
-			{ topic: 'Conversión de unidades', text: 'Convierte 760 mmHg a atm.', options: ['0,5 atm', '1 atm', '2 atm', '760 atm'], answer: 1, explain: 'Correcto: 760 mmHg equivalen a 1 atm.' },
-			{ topic: 'Gas ideal', text: 'En el modelo de gas ideal, las partículas se consideran...', options: ['Sin movimiento', 'De volumen despreciable y en movimiento constante', 'Unidas en una red fija', 'Con atracciones muy fuertes'], answer: 1, explain: 'Correcto: el modelo supone partículas pequeñas en movimiento continuo.' },
-			{ topic: 'Estequiometría con gases', text: 'Ejercicio: en 2H₂ + O₂ → 2H₂O(g), reaccionan 4 mol de H₂. ¿Qué volumen de O₂ se necesita a 1 atm y 300 K? Usa PV = nRT.', options: ['24,6 L', '49,2 L', '73,8 L', '98,4 L'], answer: 1, explain: 'Correcto: 4 mol de H₂ necesitan 2 mol de O₂; V = 2 × 0,082 × 300 / 1 = 49,2 L.' },
-			{ topic: 'Estequiometría con gases', text: 'Ejercicio: en N₂ + 3H₂ → 2NH₃, reaccionan 3 mol de H₂. ¿Qué volumen de NH₃ se forma a 2 atm y 300 K? Usa PV = nRT.', options: ['12,3 L', '24,6 L', '36,9 L', '49,2 L'], answer: 1, explain: 'Correcto: 3 mol de H₂ forman 2 mol de NH₃; V = 2 × 0,082 × 300 / 2 = 24,6 L.' },
-			{ topic: 'Estequiometría con gases', text: 'Ejercicio: en CH₄ + 2O₂ → CO₂ + 2H₂O(g), reaccionan 2 mol de CH₄. ¿Qué volumen de O₂ se requiere a 1,5 atm y 300 K? Usa PV = nRT.', options: ['32,8 L', '49,2 L', '65,6 L', '98,4 L'], answer: 2, explain: 'Correcto: 2 mol de CH₄ requieren 4 mol de O₂; V = 4 × 0,082 × 300 / 1,5 = 65,6 L.' },
-			{ topic: 'Estequiometría con gases', text: 'En 2CO + O₂ → 2CO₂, 2 mol de CO producen 2 mol de CO₂. ¿Qué volumen de CO₂ se forma a 1 atm y 273 K?', options: ['11,2 L', '22,4 L', '44,8 L', '67,2 L'], answer: 2, explain: 'Correcto: se forman 2 mol de CO₂; V = 2 × 0,082 × 273 / 1 ≈ 44,8 L.' },
-			{ topic: 'Mezclas gaseosas', text: 'La presión total de una mezcla ideal de gases es...', options: ['La suma de sus presiones parciales', 'La presión del gas más pesado', 'Siempre 1 atm', 'La diferencia entre sus volúmenes'], answer: 0, explain: 'Correcto: la ley de Dalton establece que las presiones parciales se suman.' },
-			{ topic: 'Densidad de gases', text: 'A igual temperatura y presión, un gas con mayor masa molar tiene generalmente...', options: ['Menor densidad', 'Mayor densidad', 'La misma densidad', 'Presión cero'], answer: 1, explain: 'Correcto: a T y P iguales, la densidad aumenta con la masa molar.' }
+			{ topic: 'Trabajo', text: '¿Cuál es la fórmula del trabajo realizado por una fuerza constante?', options: ['W = m·v', 'W = F·d·cos(θ)', 'W = m·g·h', 'W = ½·m·v²'], answer: 1, explain: 'Correcto: el trabajo es W = F·d·cos(θ), donde F es fuerza, d es desplazamiento y θ es el ángulo entre ellos.' },
+			{ topic: 'Energía mecánica', text: '¿Cuál es la energía mecánica total de un objeto?', options: ['E = m·g·h', 'E = ½·m·v²', 'E = m·g·h + ½·m·v²', 'E = F·d'], answer: 2, explain: 'Correcto: la energía mecánica es la suma de energía potencial gravitatoria (E_p = m·g·h) y energía cinética (E_c = ½·m·v²).' },
+			{ topic: 'Cinemática y energía', text: 'Un objeto se lanza hacia arriba con velocidad inicial de 20 m/s. ¿Cuál es su altura máxima? (Usa g = 10 m/s², sin fricción)', options: ['10 m', '20 m', '30 m', '40 m'], answer: 1, explain: 'Correcto: en la altura máxima, v = 0. Usando conservación de energía: ½·m·v₀² = m·g·h → h = v₀²/(2g) = 400/20 = 20 m.' },
+			{ topic: 'Plano inclinado y energía', text: 'Ejercicio: un bloque de 2 kg se suelta desde reposo en un plano inclinado sin fricción a 5 m de altura. ¿Cuál es su velocidad al llegar al pie del plano? (g = 10 m/s²)', options: ['5 m/s', '8 m/s', '10 m/s', '14 m/s'], answer: 2, explain: 'Correcto: E_p inicial = E_c final → m·g·h = ½·m·v² → v = √(2·g·h) = √(2·10·5) = √100 = 10 m/s.' },
+			{ topic: 'Teorema del trabajo y energía', text: 'Ejercicio: un auto de 1000 kg se acelera desde 0 a 20 m/s en línea recta. ¿Cuál es el trabajo realizado por la fuerza neta?', options: ['100 kJ', '200 kJ', '300 kJ', '400 kJ'], answer: 1, explain: 'Correcto: por el teorema del trabajo-energía, W = ΔE_c = ½·m·v² - 0 = ½·1000·400 = 200 kJ.' }
 		];
 		const SUPABASE_URL = 'https://upkayrgkhcuxvimmidgr.supabase.co';
 		const SUPABASE_KEY = 'sb_publishable_kSR7NWGjWdTvFwsryAUbmw_dd01X-75';
@@ -213,7 +198,7 @@
 
 		function createExam() {
 			const random = Math.random;
-			state.exam = shuffle(questions, random).slice(0, 10).map((question) => {
+			state.exam = shuffle(questions, random).slice(0, 5).map((question) => {
 				const options = shuffle(question.options.map((text, index) => ({ text, correct: index === question.answer })), random);
 				return { ...question, options: options.map((option) => option.text), answer: options.findIndex((option) => option.correct) };
 			});
