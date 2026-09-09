@@ -127,6 +127,10 @@
 					<div class="ranking-heading"><h2 id="ranking-title">Ranking</h2><span id="participant-count">0 ingresos</span></div>
 					<div id="ranking-list" class="ranking-list"><div class="ranking-empty">Cargando resultados...</div></div>
 				</section>
+				<section class="ranking" aria-labelledby="participation-title">
+					<div class="ranking-heading"><h2 id="participation-title">Participantes</h2></div>
+					<div id="participation-list" class="ranking-list"><div class="ranking-empty">Cargando participantes...</div></div>
+				</section>
 			</section>
 
 			<section id="quiz-screen" class="screen" hidden>
@@ -272,6 +276,7 @@
 				if (!response.ok) throw new Error('result not saved');
 				$('ranking-status').textContent = 'Resultado guardado en el ranking compartido.';
 				await loadRanking();
+				await loadParticipationTable();
 			} catch (error) {
 				$('ranking-status').textContent = 'No se pudo sincronizar el ranking. Revisa la conexión con el servidor.';
 			}
@@ -300,6 +305,36 @@
 			} catch (error) {
 				$('participant-count').textContent = 'Ingresos no disponibles';
 			}
+		}
+
+		async function loadParticipationTable() {
+			try {
+				const response = await fetch(`${SUPABASE_URL}/rest/v1/participation_events?select=name,status,created_at&order=created_at.desc&limit=1000`, {
+					headers: { apikey: SUPABASE_KEY, Authorization: `Bearer ${SUPABASE_KEY}` }
+				});
+				if (!response.ok) throw new Error('participation unavailable');
+				const entries = await response.json();
+				
+				// Get latest status per name
+				const latestPerName = {};
+				entries.forEach((entry) => {
+					const normalizedName = normalizeName(entry.name);
+					if (!latestPerName[normalizedName]) {
+						latestPerName[normalizedName] = entry;
+					}
+				});
+				
+				const unique = Object.values(latestPerName).sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+				renderParticipationTable(unique);
+			} catch (error) {
+				$('participation-list').innerHTML = '<div class="ranking-empty">Participantes no disponibles.</div>';
+			}
+		}
+
+		function renderParticipationTable(entries) {
+			if (!entries.length) { $('participation-list').innerHTML = '<div class="ranking-empty">Sin participantes aún.</div>'; return; }
+			const statusLabel = { registered: '🔵 En curso', completed: '✅ Completado', abandoned: '⏹️ Abandonado' };
+			$('participation-list').innerHTML = entries.slice(0, 50).map((entry, index) => `<div class="ranking-item"><span class="ranking-position">${index + 1}.</span><span class="ranking-name">${escapeHtml(entry.name)}</span><span class="ranking-score">${statusLabel[entry.status] || entry.status}</span></div>`).join('');
 		}
 
 		function renderQuestion() {
@@ -388,6 +423,7 @@
 			$('student-name').value = '';
 			show('start-screen');
 			loadRanking();
+			loadParticipationTable();
 		});
 		$('next-btn').addEventListener('click', () => {
 			if (state.current === state.exam.length - 1) finish();
@@ -410,6 +446,7 @@
 		});
 		loadRanking();
 		loadParticipationCount();
+		loadParticipationTable();
 	</script>
 </body>
 </html>
