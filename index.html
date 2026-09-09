@@ -250,7 +250,7 @@
 				if (!response.ok) throw new Error('ranking unavailable');
 				renderRanking(await response.json());
 			} catch (error) {
-				$('ranking-list').innerHTML = '<div class="ranking-empty">Configura Supabase para activar el ranking.</div>';
+				$('ranking-list').innerHTML = '<div class="ranking-empty">El ranking aparecerá cuando el servidor esté conectado.</div>';
 			}
 		}
 

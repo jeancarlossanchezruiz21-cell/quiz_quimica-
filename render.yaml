@@ -1,8 +1,0 @@
-services:
-  - type: web
-    name: quimio-quiz
-    runtime: python
-    buildCommand: ""
-    startCommand: "python server.py"
-    healthCheckPath: /app.html
-    autoDeployTrigger: commit
