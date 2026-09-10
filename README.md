@@ -1,12 +1,12 @@
-# Quimio Quiz
+# Quimio Quiz — Movimiento Rectilíneo Uniforme (MRU)
 
-Quiz público de gases ideales publicado con GitHub Pages.
+Quiz público de **Movimiento Rectilíneo Uniforme** publicado con GitHub Pages.
 
 ## Funcionamiento
 
 - La página principal es `index.html`.
 - El ranking y los registros de participación se guardan en Supabase.
-- Cada persona recibe una combinación diferente de preguntas.
+- Cada intento muestra **5 preguntas** (3 fáciles + 2 difíciles).
 - La aplicación registra ingresos, finalizaciones y abandonos.
 
 ## Configuración de Supabase
