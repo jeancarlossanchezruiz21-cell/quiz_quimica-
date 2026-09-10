@@ -1,5 +1,6 @@
 <!doctype html>
 <html lang="es">
+
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
@@ -19,7 +20,10 @@
 			--shadow: 0 18px 44px rgba(31, 58, 42, .11);
 		}
 
-		* { box-sizing: border-box; }
+		* {
+			box-sizing: border-box;
+		}
+
 		body {
 			margin: 0;
 			min-width: 320px;
@@ -27,81 +31,464 @@
 			background: var(--paper);
 			font-family: Georgia, 'Times New Roman', serif;
 		}
-		button { font: inherit; }
+
+		button {
+			font: inherit;
+		}
+
 		.app {
 			min-height: 100svh;
 			padding: max(22px, env(safe-area-inset-top)) 20px max(24px, env(safe-area-inset-bottom));
 			background: radial-gradient(circle at 100% 0, #e4f0dd 0, transparent 32%), var(--paper);
 		}
-		.shell { width: min(100%, 540px); margin: 0 auto; }
-		.topbar, .stats, .question-meta, .actions, .result-row { display: flex; align-items: center; justify-content: space-between; }
-		.topbar { margin-bottom: 34px; }
-		.brand { display: flex; align-items: center; gap: 10px; font-weight: 700; letter-spacing: .02em; }
-		.mark { display: grid; place-items: center; width: 38px; height: 38px; border-radius: 13px; background: var(--ink); color: var(--yellow); font-size: 21px; transform: rotate(-8deg); }
-		.connection { display: inline-flex; align-items: center; gap: 7px; color: var(--muted); font: 700 11px Arial, sans-serif; text-transform: uppercase; letter-spacing: .08em; }
-		.dot { width: 8px; height: 8px; background: var(--mint-strong); border-radius: 50%; box-shadow: 0 0 0 4px #dcebdd; }
-		h1, h2, p { margin-top: 0; }
-		h1 { max-width: 430px; margin-bottom: 14px; font-size: clamp(39px, 11vw, 62px); line-height: .97; letter-spacing: -.045em; }
-		h1 em { color: var(--mint-strong); font-style: normal; }
-		.intro { max-width: 390px; margin-bottom: 28px; color: var(--muted); font: 16px/1.5 Arial, sans-serif; }
-		.feature-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 9px; margin-bottom: 25px; }
-		.feature { min-height: 96px; padding: 13px 12px; border: 1px solid var(--line); border-radius: 14px; background: rgba(255,253,248,.64); }
-		.feature b { display: block; margin-bottom: 9px; font-size: 23px; }
-		.feature span { color: var(--muted); font: 11px/1.2 Arial, sans-serif; }
-		.primary, .secondary { width: 100%; min-height: 56px; border: 0; border-radius: 15px; cursor: pointer; font-weight: 700; transition: transform .15s ease, box-shadow .15s ease; }
-		.primary { color: #fffdf8; background: var(--ink); box-shadow: 0 9px 0 #c9d7c8; }
-		.primary:active, .secondary:active { transform: translateY(3px); box-shadow: none; }
-		.secondary { margin-top: 12px; color: var(--ink); border: 1px solid var(--line); background: transparent; }
-		.screen[hidden] { display: none; }
-		.stats { margin-bottom: 18px; font: 700 12px Arial, sans-serif; letter-spacing: .06em; text-transform: uppercase; }
-		.progress-track { height: 7px; margin-bottom: 35px; border-radius: 10px; background: #dfe8dc; overflow: hidden; }
-		.progress-value { width: 20%; height: 100%; border-radius: inherit; background: var(--mint-strong); transition: width .3s ease; }
-		.question-meta { margin-bottom: 16px; color: var(--muted); font: 700 11px Arial, sans-serif; letter-spacing: .08em; text-transform: uppercase; }
-		.question-card { padding: 26px 20px 20px; border-radius: 22px; background: var(--card); box-shadow: var(--shadow); }
-		.question-card h2 { margin-bottom: 24px; font-size: clamp(24px, 7vw, 32px); line-height: 1.08; letter-spacing: -.025em; }
-		.answers { display: grid; gap: 10px; }
-		.answer { display: flex; align-items: center; gap: 12px; width: 100%; min-height: 54px; padding: 9px 12px; border: 1px solid var(--line); border-radius: 13px; color: var(--ink); background: #fff; cursor: pointer; text-align: left; }
-		.answer:disabled { cursor: default; }
-		.answer .letter { display: grid; flex: 0 0 32px; place-items: center; width: 32px; height: 32px; border-radius: 9px; background: #edf2eb; font: 700 13px Arial, sans-serif; }
-		.answer.correct { border-color: var(--mint-strong); background: #e8f4e9; }
-		.answer.correct .letter { color: #fff; background: var(--mint-strong); }
-		.answer.wrong { border-color: var(--coral); background: #fff0ea; }
-		.answer.wrong .letter { color: #fff; background: var(--coral); }
-		.answer span:last-child { font: 15px/1.25 Arial, sans-serif; }
-		.feedback { min-height: 25px; margin: 16px 2px 0; color: var(--mint-strong); font: 700 13px/1.35 Arial, sans-serif; }
-		.feedback.bad { color: var(--coral); }
-		.next { margin-top: 14px; }
-		.result-hero { margin: 20px 0 25px; text-align: center; }
-		.score-circle { display: grid; place-items: center; width: 142px; height: 142px; margin: 0 auto 20px; border: 10px solid var(--mint); border-radius: 50%; background: var(--card); font-size: 40px; font-weight: 700; }
-		.result-hero h2 { margin-bottom: 8px; font-size: 32px; }
-		.result-hero p { color: var(--muted); font: 15px Arial, sans-serif; }
-		.result-list { border-top: 1px solid var(--line); }
-		.result-row { padding: 14px 0; border-bottom: 1px solid var(--line); font: 14px Arial, sans-serif; }
-		.result-row strong { color: var(--mint-strong); }
-		.lock-note { margin-top: 16px; color: var(--muted); text-align: center; font: 11px/1.4 Arial, sans-serif; }
-		.lock { position: fixed; inset: 0; z-index: 5; display: grid; place-items: center; padding: 24px; background: rgba(23,33,27,.96); }
-		.lock[hidden] { display: none; }
-		.lock-card { width: min(100%, 390px); padding: 30px 24px; border-radius: 22px; color: #fffdf8; background: #283b31; text-align: center; box-shadow: var(--shadow); }
-		.lock-card .mark { margin: 0 auto 21px; background: var(--yellow); color: var(--ink); }
-		.lock-card h2 { margin-bottom: 12px; font-size: 29px; }
-		.lock-card p { margin-bottom: 0; color: #cbd8ce; font: 14px/1.5 Arial, sans-serif; }
-		.name-field { display: grid; gap: 8px; margin-bottom: 14px; }
-		.name-field label { color: var(--muted); font: 700 11px Arial, sans-serif; letter-spacing: .08em; text-transform: uppercase; }
-		.name-field input { width: 100%; min-height: 54px; padding: 0 15px; border: 1px solid var(--line); border-radius: 13px; color: var(--ink); background: var(--card); font: 16px Arial, sans-serif; outline: none; }
-		.name-field input:focus { border-color: var(--mint-strong); box-shadow: 0 0 0 3px var(--mint); }
-		.ranking { margin-top: 30px; }
-		.ranking-heading { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 10px; }
-		.ranking-heading h2 { margin: 0; font-size: 22px; }
-		.ranking-heading span { color: var(--muted); font: 11px Arial, sans-serif; }
-		.ranking-list { border-top: 1px solid var(--line); }
-		.ranking-item { display: grid; grid-template-columns: 30px 1fr auto; gap: 10px; align-items: center; padding: 11px 0; border-bottom: 1px solid var(--line); font: 14px Arial, sans-serif; }
-		.ranking-position { color: var(--muted); font-weight: 700; }
-		.ranking-name { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-		.ranking-score { color: var(--mint-strong); font-weight: 700; }
-		.ranking-empty { padding: 14px 0; color: var(--muted); font: 13px Arial, sans-serif; }
-		@media (min-width: 600px) { .app { padding-top: 42px; } }
+
+		.shell {
+			width: min(100%, 540px);
+			margin: 0 auto;
+		}
+
+		.topbar,
+		.stats,
+		.question-meta,
+		.actions,
+		.result-row {
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+		}
+
+		.topbar {
+			margin-bottom: 34px;
+		}
+
+		.brand {
+			display: flex;
+			align-items: center;
+			gap: 10px;
+			font-weight: 700;
+			letter-spacing: .02em;
+		}
+
+		.mark {
+			display: grid;
+			place-items: center;
+			width: 38px;
+			height: 38px;
+			border-radius: 13px;
+			background: var(--ink);
+			color: var(--yellow);
+			font-size: 21px;
+			transform: rotate(-8deg);
+		}
+
+		.connection {
+			display: inline-flex;
+			align-items: center;
+			gap: 7px;
+			color: var(--muted);
+			font: 700 11px Arial, sans-serif;
+			text-transform: uppercase;
+			letter-spacing: .08em;
+		}
+
+		.dot {
+			width: 8px;
+			height: 8px;
+			background: var(--mint-strong);
+			border-radius: 50%;
+			box-shadow: 0 0 0 4px #dcebdd;
+		}
+
+		h1,
+		h2,
+		p {
+			margin-top: 0;
+		}
+
+		h1 {
+			max-width: 430px;
+			margin-bottom: 14px;
+			font-size: clamp(39px, 11vw, 62px);
+			line-height: .97;
+			letter-spacing: -.045em;
+		}
+
+		h1 em {
+			color: var(--mint-strong);
+			font-style: normal;
+		}
+
+		.intro {
+			max-width: 390px;
+			margin-bottom: 28px;
+			color: var(--muted);
+			font: 16px/1.5 Arial, sans-serif;
+		}
+
+		.feature-grid {
+			display: grid;
+			grid-template-columns: repeat(3, 1fr);
+			gap: 9px;
+			margin-bottom: 25px;
+		}
+
+		.feature {
+			min-height: 96px;
+			padding: 13px 12px;
+			border: 1px solid var(--line);
+			border-radius: 14px;
+			background: rgba(255, 253, 248, .64);
+		}
+
+		.feature b {
+			display: block;
+			margin-bottom: 9px;
+			font-size: 23px;
+		}
+
+		.feature span {
+			color: var(--muted);
+			font: 11px/1.2 Arial, sans-serif;
+		}
+
+		.primary,
+		.secondary {
+			width: 100%;
+			min-height: 56px;
+			border: 0;
+			border-radius: 15px;
+			cursor: pointer;
+			font-weight: 700;
+			transition: transform .15s ease, box-shadow .15s ease;
+		}
+
+		.primary {
+			color: #fffdf8;
+			background: var(--ink);
+			box-shadow: 0 9px 0 #c9d7c8;
+		}
+
+		.primary:active,
+		.secondary:active {
+			transform: translateY(3px);
+			box-shadow: none;
+		}
+
+		.secondary {
+			margin-top: 12px;
+			color: var(--ink);
+			border: 1px solid var(--line);
+			background: transparent;
+		}
+
+		.screen[hidden] {
+			display: none;
+		}
+
+		.stats {
+			margin-bottom: 18px;
+			font: 700 12px Arial, sans-serif;
+			letter-spacing: .06em;
+			text-transform: uppercase;
+		}
+
+		.progress-track {
+			height: 7px;
+			margin-bottom: 35px;
+			border-radius: 10px;
+			background: #dfe8dc;
+			overflow: hidden;
+		}
+
+		.progress-value {
+			width: 20%;
+			height: 100%;
+			border-radius: inherit;
+			background: var(--mint-strong);
+			transition: width .3s ease;
+		}
+
+		.question-meta {
+			margin-bottom: 16px;
+			color: var(--muted);
+			font: 700 11px Arial, sans-serif;
+			letter-spacing: .08em;
+			text-transform: uppercase;
+		}
+
+		.question-card {
+			padding: 26px 20px 20px;
+			border-radius: 22px;
+			background: var(--card);
+			box-shadow: var(--shadow);
+		}
+
+		.question-card h2 {
+			margin-bottom: 24px;
+			font-size: clamp(24px, 7vw, 32px);
+			line-height: 1.08;
+			letter-spacing: -.025em;
+		}
+
+		.answers {
+			display: grid;
+			gap: 10px;
+		}
+
+		.answer {
+			display: flex;
+			align-items: center;
+			gap: 12px;
+			width: 100%;
+			min-height: 54px;
+			padding: 9px 12px;
+			border: 1px solid var(--line);
+			border-radius: 13px;
+			color: var(--ink);
+			background: #fff;
+			cursor: pointer;
+			text-align: left;
+		}
+
+		.answer:disabled {
+			cursor: default;
+		}
+
+		.answer .letter {
+			display: grid;
+			flex: 0 0 32px;
+			place-items: center;
+			width: 32px;
+			height: 32px;
+			border-radius: 9px;
+			background: #edf2eb;
+			font: 700 13px Arial, sans-serif;
+		}
+
+		.answer.correct {
+			border-color: var(--mint-strong);
+			background: #e8f4e9;
+		}
+
+		.answer.correct .letter {
+			color: #fff;
+			background: var(--mint-strong);
+		}
+
+		.answer.wrong {
+			border-color: var(--coral);
+			background: #fff0ea;
+		}
+
+		.answer.wrong .letter {
+			color: #fff;
+			background: var(--coral);
+		}
+
+		.answer span:last-child {
+			font: 15px/1.25 Arial, sans-serif;
+		}
+
+		.feedback {
+			min-height: 25px;
+			margin: 16px 2px 0;
+			color: var(--mint-strong);
+			font: 700 13px/1.35 Arial, sans-serif;
+		}
+
+		.feedback.bad {
+			color: var(--coral);
+		}
+
+		.next {
+			margin-top: 14px;
+		}
+
+		.result-hero {
+			margin: 20px 0 25px;
+			text-align: center;
+		}
+
+		.score-circle {
+			display: grid;
+			place-items: center;
+			width: 142px;
+			height: 142px;
+			margin: 0 auto 20px;
+			border: 10px solid var(--mint);
+			border-radius: 50%;
+			background: var(--card);
+			font-size: 40px;
+			font-weight: 700;
+		}
+
+		.result-hero h2 {
+			margin-bottom: 8px;
+			font-size: 32px;
+		}
+
+		.result-hero p {
+			color: var(--muted);
+			font: 15px Arial, sans-serif;
+		}
+
+		.result-list {
+			border-top: 1px solid var(--line);
+		}
+
+		.result-row {
+			padding: 14px 0;
+			border-bottom: 1px solid var(--line);
+			font: 14px Arial, sans-serif;
+		}
+
+		.result-row strong {
+			color: var(--mint-strong);
+		}
+
+		.lock-note {
+			margin-top: 16px;
+			color: var(--muted);
+			text-align: center;
+			font: 11px/1.4 Arial, sans-serif;
+		}
+
+		.lock {
+			position: fixed;
+			inset: 0;
+			z-index: 5;
+			display: grid;
+			place-items: center;
+			padding: 24px;
+			background: rgba(23, 33, 27, .96);
+		}
+
+		.lock[hidden] {
+			display: none;
+		}
+
+		.lock-card {
+			width: min(100%, 390px);
+			padding: 30px 24px;
+			border-radius: 22px;
+			color: #fffdf8;
+			background: #283b31;
+			text-align: center;
+			box-shadow: var(--shadow);
+		}
+
+		.lock-card .mark {
+			margin: 0 auto 21px;
+			background: var(--yellow);
+			color: var(--ink);
+		}
+
+		.lock-card h2 {
+			margin-bottom: 12px;
+			font-size: 29px;
+		}
+
+		.lock-card p {
+			margin-bottom: 0;
+			color: #cbd8ce;
+			font: 14px/1.5 Arial, sans-serif;
+		}
+
+		.name-field {
+			display: grid;
+			gap: 8px;
+			margin-bottom: 14px;
+		}
+
+		.name-field label {
+			color: var(--muted);
+			font: 700 11px Arial, sans-serif;
+			letter-spacing: .08em;
+			text-transform: uppercase;
+		}
+
+		.name-field input {
+			width: 100%;
+			min-height: 54px;
+			padding: 0 15px;
+			border: 1px solid var(--line);
+			border-radius: 13px;
+			color: var(--ink);
+			background: var(--card);
+			font: 16px Arial, sans-serif;
+			outline: none;
+		}
+
+		.name-field input:focus {
+			border-color: var(--mint-strong);
+			box-shadow: 0 0 0 3px var(--mint);
+		}
+
+		.ranking {
+			margin-top: 30px;
+		}
+
+		.ranking-heading {
+			display: flex;
+			justify-content: space-between;
+			align-items: baseline;
+			margin-bottom: 10px;
+		}
+
+		.ranking-heading h2 {
+			margin: 0;
+			font-size: 22px;
+		}
+
+		.ranking-heading span {
+			color: var(--muted);
+			font: 11px Arial, sans-serif;
+		}
+
+		.ranking-list {
+			border-top: 1px solid var(--line);
+		}
+
+		.ranking-item {
+			display: grid;
+			grid-template-columns: 30px 1fr auto;
+			gap: 10px;
+			align-items: center;
+			padding: 11px 0;
+			border-bottom: 1px solid var(--line);
+			font: 14px Arial, sans-serif;
+		}
+
+		.ranking-position {
+			color: var(--muted);
+			font-weight: 700;
+		}
+
+		.ranking-name {
+			overflow: hidden;
+			text-overflow: ellipsis;
+			white-space: nowrap;
+		}
+
+		.ranking-score {
+			color: var(--mint-strong);
+			font-weight: 700;
+		}
+
+		.ranking-empty {
+			padding: 14px 0;
+			color: var(--muted);
+			font: 13px Arial, sans-serif;
+		}
+
+		@media (min-width: 600px) {
+			.app {
+				padding-top: 42px;
+			}
+		}
 	</style>
 </head>
+
 <body>
 	<main class="app">
 		<div class="shell">
@@ -112,10 +499,10 @@
 
 			<section id="start-screen" class="screen">
 				<h1>Piensa.<br><em>Reacciona.</em><br>Aprende.</h1>
-					<p class="intro">Un reto de 10 preguntas sobre las leyes de los gases: estequiometría de gases, ley de Boyle, leyes de Charles y Gay-Lussac, y ley combinada. Resuelve problemas de presión, volumen y temperatura.</p>
+				<p class="intro">Un reto sobre las leyes de los gases: estequiometría de gases, ley de Boyle, leyes de Charles y Gay-Lussac, y ley combinada. Cada intento muestra 10 preguntas al azar de un banco de 20, para que cada persona reciba una selección diferente.</p>
 				<div class="feature-grid">
-				<div class="feature"><b>10</b><span>preguntas</span></div>
-				<div class="feature"><b>3</b><span>difíciles</span></div>
+				<div class="feature"><b>10</b><span>preguntas al azar</span></div>
+				<div class="feature"><b>20</b><span>en el banco</span></div>
 				<div class="feature"><b>01</b><span>intento único</span></div>
 				</div>
 				<div class="name-field">
@@ -125,24 +512,36 @@
 				<button id="start-btn" class="primary">Comenzar quiz <span aria-hidden="true">→</span></button>
 				<p class="lock-note">Al comenzar, salir de esta pantalla finalizará el intento.</p>
 				<section class="ranking" aria-labelledby="ranking-title">
-					<div class="ranking-heading"><h2 id="ranking-title">Ranking</h2><span id="participant-count">0 ingresos</span></div>
-					<div id="ranking-list" class="ranking-list"><div class="ranking-empty">Cargando resultados...</div></div>
+					<div class="ranking-heading">
+						<h2 id="ranking-title">Ranking</h2><span id="participant-count">0 ingresos</span>
+					</div>
+					<div id="ranking-list" class="ranking-list">
+						<div class="ranking-empty">Cargando resultados...</div>
+					</div>
 				</section>
 				<section class="ranking" aria-labelledby="participation-title">
-					<div class="ranking-heading"><h2 id="participation-title">Participantes</h2></div>
-					<div id="participation-list" class="ranking-list"><div class="ranking-empty">Cargando participantes...</div></div>
+					<div class="ranking-heading">
+						<h2 id="participation-title">Participantes</h2>
+					</div>
+					<div id="participation-list" class="ranking-list">
+						<div class="ranking-empty">Cargando participantes...</div>
+					</div>
 				</section>
 			</section>
 
 			<section id="quiz-screen" class="screen" hidden>
 				<div class="stats"><span id="question-count">Pregunta 01 / 10</span></div>
-				<div class="progress-track"><div id="progress" class="progress-value"></div></div>
-				<div class="question-meta"><span id="topic">Materia · Química</span><span id="points">+10 pts</span></div>
+				<div class="progress-track">
+					<div id="progress" class="progress-value"></div>
+				</div>
+				<div class="question-meta"><span id="topic">Materia · Química</span><span id="points">+10 pts</span>
+				</div>
 				<article class="question-card">
 					<h2 id="question"></h2>
 					<div id="answers" class="answers"></div>
 					<p id="feedback" class="feedback" aria-live="polite"></p>
-					<button id="next-btn" class="primary next" hidden>Siguiente <span aria-hidden="true">→</span></button>
+					<button id="next-btn" class="primary next" hidden>Siguiente <span
+							aria-hidden="true">→</span></button>
 				</article>
 			</section>
 
@@ -153,7 +552,8 @@
 					<p id="result-message">Tu intento quedó registrado.</p>
 				</div>
 				<div class="result-list">
-					<div class="result-row"><span>Respuestas correctas</span><strong id="correct-count">0 / 10</strong></div>
+					<div class="result-row"><span>Respuestas correctas</span><strong id="correct-count">0 / 10</strong>
+					</div>
 					<div class="result-row"><span>Puntuación</span><strong id="final-points">0 puntos</strong></div>
 					<div class="result-row"><span>Estado</span><strong>Intento cerrado</strong></div>
 				</div>
@@ -167,28 +567,39 @@
 		<div class="lock-card">
 			<div class="mark">⚗</div>
 			<h2>Intento cerrado</h2>
-			<p>La sesión terminó porque la aplicación dejó de estar activa. Este quiz permite un solo intento por dispositivo.</p>
+			<p>La sesión terminó porque la aplicación dejó de estar activa. Este quiz permite un solo intento por
+				dispositivo.</p>
 		</div>
 	</div>
 
 	<script>
 		'use strict';
-			const questions = [
-		// Estequiometría de gases
-		{ topic: 'Estequiometría de gases', text: 'En la reacción N₂(g) + 3H₂(g) → 2NH₃(g), ¿qué volumen de NH₃ se forma a partir de 5 L de N₂, si todos los gases están en las mismas condiciones de T y P?', options: ['2.5 L', '5 L', '10 L', '15 L'], answer: 2, explain: 'Correcto: por volúmenes de reacción (ley de Avogadro), 1 volumen de N₂ produce 2 de NH₃. Así, 5 L de N₂ → 10 L de NH₃.' },
-		{ topic: 'Estequiometría de gases', text: '¿Qué volumen de O₂, a 0 °C y 1 atm, se necesita para quemar por completo 11.2 L de CH₄? (CH₄ + 2O₂ → CO₂ + 2H₂O; mismas condiciones de T y P)', options: ['5.6 L', '11.2 L', '22.4 L', '44.8 L'], answer: 2, explain: 'Correcto: la relación es 1 volumen de CH₄ por 2 de O₂. Entonces 11.2 L × 2 = 22.4 L de O₂.' },
-		{ topic: 'Estequiometría de gases', text: '¿Qué volumen de CO₂, medido a 0 °C y 1 atm, se produce al quemar 8 g de CH₄? (CH₄ + 2O₂ → CO₂ + 2H₂O; C = 12, H = 1; volumen molar = 22.4 L/mol)', options: ['5.6 L', '11.2 L', '16.8 L', '22.4 L'], answer: 1, explain: 'Correcto: moles de CH₄ = 8 / 16 = 0.5 mol. La relación es 1:1, así que se forman 0.5 mol de CO₂ × 22.4 L/mol = 11.2 L.' },
-		// Ley de Boyle
-		{ topic: 'Ley de Boyle', text: 'Según la ley de Boyle, si la temperatura permanece constante, la presión y el volumen de un gas están en relación...', options: ['Directamente proporcional', 'Inversamente proporcional', 'Sin relación alguna', 'Proporcional al cuadrado'], answer: 1, explain: 'Correcto: a T constante, P·V = constante, por lo que la presión y el volumen son inversamente proporcionales.' },
-		{ topic: 'Ley de Boyle', text: 'Un gas ocupa 2.5 L a 800 mmHg. Si la temperatura es constante, ¿a qué presión (mmHg) ocupará 4 L?', options: ['400 mmHg', '500 mmHg', '1000 mmHg', '1280 mmHg'], answer: 1, explain: 'Correcto: P₁·V₁ = P₂·V₂ → 800 × 2.5 = P₂ × 4 → P₂ = 2000 / 4 = 500 mmHg.' },
-		// Leyes de Charles y Gay-Lussac
-		{ topic: 'Ley de Charles', text: 'Según la ley de Charles, a presión constante, el volumen de un gas es directamente proporcional a...', options: ['La presión externa', 'Su masa', 'La temperatura absoluta (en kelvin)', 'Su densidad'], answer: 2, explain: 'Correcto: a P constante, V/T = constante, donde T se mide en kelvin (escala absoluta).' },
-		{ topic: 'Ley de Charles', text: 'Un gas ocupa 300 mL a 27 °C. ¿Qué volumen ocupará a 127 °C, si la presión permanece constante?', options: ['250 mL', '350 mL', '400 mL', '500 mL'], answer: 2, explain: 'Correcto: convertimos a kelvin: T₁ = 300 K y T₂ = 400 K. V₂ = V₁·T₂/T₁ = 300 × 400 / 300 = 400 mL.' },
-		{ topic: 'Ley de Gay-Lussac', text: 'Un gas a 27 °C ejerce 1.5 atm dentro de un recipiente rígido. ¿Cuál será la presión (atm) si se calienta a 127 °C?', options: ['1.75 atm', '2.0 atm', '2.25 atm', '3.0 atm'], answer: 1, explain: 'Correcto: a V constante, P₁/T₁ = P₂/T₂. Con T₁ = 300 K y T₂ = 400 K: P₂ = 1.5 × 400 / 300 = 2.0 atm.' },
-		// Ley combinada
+		const questions = [
+			// Estequiometría de gases
+			{ topic: 'Estequiometría de gases', text: 'En la reacción N₂(g) + 3H₂(g) → 2NH₃(g), ¿qué volumen de NH₃ se forma a partir de 5 L de N₂, si todos los gases están en las mismas condiciones de T y P?', options: ['2.5 L', '5 L', '10 L', '15 L'], answer: 2, explain: 'Correcto: por volúmenes de reacción (ley de Avogadro), 1 volumen de N₂ produce 2 de NH₃. Así, 5 L de N₂ → 10 L de NH₃.' },
+			{ topic: 'Estequiometría de gases', text: '¿Qué volumen de O₂, a 0 °C y 1 atm, se necesita para quemar por completo 11.2 L de CH₄? (CH₄ + 2O₂ → CO₂ + 2H₂O; mismas condiciones de T y P)', options: ['5.6 L', '11.2 L', '22.4 L', '44.8 L'], answer: 2, explain: 'Correcto: la relación es 1 volumen de CH₄ por 2 de O₂. Entonces 11.2 L × 2 = 22.4 L de O₂.' },
+			{ topic: 'Estequiometría de gases', text: '¿Qué volumen de CO₂, medido a 0 °C y 1 atm, se produce al quemar 8 g de CH₄? (CH₄ + 2O₂ → CO₂ + 2H₂O; C = 12, H = 1; volumen molar = 22.4 L/mol)', options: ['5.6 L', '11.2 L', '16.8 L', '22.4 L'], answer: 1, explain: 'Correcto: moles de CH₄ = 8 / 16 = 0.5 mol. La relación es 1:1, así que se forman 0.5 mol de CO₂ × 22.4 L/mol = 11.2 L.' },
+			// Ley de Boyle
+			{ topic: 'Ley de Boyle', text: 'Según la ley de Boyle, si la temperatura permanece constante, la presión y el volumen de un gas están en relación...', options: ['Directamente proporcional', 'Inversamente proporcional', 'Sin relación alguna', 'Proporcional al cuadrado'], answer: 1, explain: 'Correcto: a T constante, P·V = constante, por lo que la presión y el volumen son inversamente proporcionales.' },
+			{ topic: 'Ley de Boyle', text: 'Un gas ocupa 2.5 L a 800 mmHg. Si la temperatura es constante, ¿a qué presión (mmHg) ocupará 4 L?', options: ['400 mmHg', '500 mmHg', '1000 mmHg', '1280 mmHg'], answer: 1, explain: 'Correcto: P₁·V₁ = P₂·V₂ → 800 × 2.5 = P₂ × 4 → P₂ = 2000 / 4 = 500 mmHg.' },
+			// Leyes de Charles y Gay-Lussac
+			{ topic: 'Ley de Charles', text: 'Según la ley de Charles, a presión constante, el volumen de un gas es directamente proporcional a...', options: ['La presión externa', 'Su masa', 'La temperatura absoluta (en kelvin)', 'Su densidad'], answer: 2, explain: 'Correcto: a P constante, V/T = constante, donde T se mide en kelvin (escala absoluta).' },
+			{ topic: 'Ley de Charles', text: 'Un gas ocupa 300 mL a 27 °C. ¿Qué volumen ocupará a 127 °C, si la presión permanece constante?', options: ['250 mL', '350 mL', '400 mL', '500 mL'], answer: 2, explain: 'Correcto: convertimos a kelvin: T₁ = 300 K y T₂ = 400 K. V₂ = V₁·T₂/T₁ = 300 × 400 / 300 = 400 mL.' },
+			{ topic: 'Ley de Gay-Lussac', text: 'Un gas a 27 °C ejerce 1.5 atm dentro de un recipiente rígido. ¿Cuál será la presión (atm) si se calienta a 127 °C?', options: ['1.75 atm', '2.0 atm', '2.25 atm', '3.0 atm'], answer: 1, explain: 'Correcto: a V constante, P₁/T₁ = P₂/T₂. Con T₁ = 300 K y T₂ = 400 K: P₂ = 1.5 × 400 / 300 = 2.0 atm.' },
+			// Ley combinada
 			{ topic: 'Ley combinada', text: 'La ley combinada de los gases relaciona presión, volumen y temperatura. ¿Cuál es su expresión correcta?', options: ['P₁·V₁ = P₂·V₂', 'V₁/T₁ = V₂/T₂', 'P₁·V₁/T₁ = P₂·V₂/T₂', 'P₁/T₁ = P₂/T₂'], answer: 2, explain: 'Correcto: la ley combinada reúne las tres variables: P₁·V₁/T₁ = P₂·V₂/T₂, con la temperatura en kelvin.' },
-		{ topic: 'Ley combinada', text: 'Un gas ocupa 600 mL a 27 °C y 720 mmHg. ¿Qué volumen (mL) ocupará a 47 °C y 800 mmHg?', options: ['540 mL', '576 mL', '600 mL', '640 mL'], answer: 1, explain: 'Correcto: V₂ = P₁·V₁·T₂ / (P₂·T₁) = (720 × 600 × 320) / (800 × 300) = 138240000 / 240000 = 576 mL.' }
-		];
+				{ topic: 'Ley combinada', text: 'Un gas ocupa 600 mL a 27 °C y 720 mmHg. ¿Qué volumen (mL) ocupará a 47 °C y 800 mmHg?', options: ['540 mL', '576 mL', '600 mL', '640 mL'], answer: 1, explain: 'Correcto: V₂ = P₁·V₁·T₂ / (P₂·T₁) = (720 × 600 × 320) / (800 × 300) = 138240000 / 240000 = 576 mL.' },
+			{ topic: 'Estequiometría de gases', text: 'En la reacción N₂(g) + 3H₂(g) → 2NH₃(g), ¿qué volumen de NH₃ se forma a partir de 9 L de H₂, si todos los gases están en las mismas condiciones de T y P?', options: ['3 L', '6 L', '9 L', '13.5 L'], answer: 1, explain: 'Correcto: la relación es 3 volúmenes de H₂ por 2 de NH₃. Entonces 9 L × 2/3 = 6 L de NH₃.' },
+			{ topic: 'Estequiometría de gases', text: '¿Qué volumen de NH₃, a 0 °C y 1 atm, se obtiene a partir de 28 g de N₂? (N₂ + 3H₂ → 2NH₃; N = 14; volumen molar = 22.4 L/mol)', options: ['22.4 L', '44.8 L', '67.2 L', '89.6 L'], answer: 1, explain: 'Correcto: moles de N₂ = 28 / 28 = 1 mol. La relación es 1:2, así que se forman 2 mol de NH₃ × 22.4 L/mol = 44.8 L.' },
+			{ topic: 'Ley de Boyle', text: 'Si el volumen de un gas se reduce a la mitad manteniendo constante la temperatura, su presión...', options: ['Se reduce a la mitad', 'Se duplica', 'No cambia', 'Se cuadruplica'], answer: 1, explain: 'Correcto: a T constante, P₁·V₁ = P₂·V₂. Si V se reduce a la mitad, la presión se duplica para mantener constante el producto.' },
+			{ topic: 'Ley de Boyle', text: 'Un gas ocupa 3 L a 1 atm. Si la temperatura es constante, ¿qué volumen (L) ocupará a 3 atm?', options: ['1 L', '3 L', '6 L', '9 L'], answer: 0, explain: 'Correcto: P₁·V₁ = P₂·V₂ → 1 × 3 = 3 × V₂ → V₂ = 1 L.' },
+				{ topic: 'Ley de Boyle', text: 'Un gas ocupa 400 mL a 600 mmHg. Si la temperatura no cambia, ¿qué presión (mmHg) se necesita para que ocupe 300 mL?', options: ['700 mmHg', '800 mmHg', '900 mmHg', '1200 mmHg'], answer: 1, explain: 'Correcto: P₁·V₁ = P₂·V₂ → 600 × 400 = P₂ × 300 → P₂ = 240000 / 300 = 800 mmHg.' },
+			{ topic: 'Ley de Gay-Lussac', text: 'En un recipiente cerrado y rígido, si la temperatura absoluta de un gas se duplica, su presión...', options: ['Se reduce a la mitad', 'Se duplica', 'No cambia', 'Se cuadruplica'], answer: 1, explain: 'Correcto: a V constante, P₁/T₁ = P₂/T₂. Si T se duplica, la presión también se duplica.' },
+			{ topic: 'Ley de Charles', text: 'Un gas ocupa 2 L a 300 K. Si la presión permanece constante, ¿qué volumen (L) ocupará a 450 K?', options: ['1.33 L', '2 L', '3 L', '4.5 L'], answer: 2, explain: 'Correcto: V₂ = V₁·T₂/T₁ = 2 × 450 / 300 = 3 L.' },
+			{ topic: 'Ley combinada', text: '500 mL de un gas están a 300 K y 1 atm. ¿Qué volumen (mL) ocuparán a 400 K y 2 atm?', options: ['250 mL', '333 mL', '500 mL', '667 mL'], answer: 1, explain: 'Correcto: V₂ = P₁·V₁·T₂ / (P₂·T₁) = (1 × 500 × 400) / (2 × 300) = 200000 / 600 ≈ 333 mL.' },
+			{ topic: 'Ley combinada', text: 'Un gas ocupa 2 L a 400 K y 2 atm. ¿Cuál será su presión (atm) si pasa a 1 L y 300 K?', options: ['1.5 atm', '2 atm', '3 atm', '4 atm'], answer: 2, explain: 'Correcto: P₂ = P₁·V₁·T₂ / (V₂·T₁) = (2 × 2 × 300) / (1 × 400) = 1200 / 400 = 3 atm.' },
+			{ topic: 'Gases ideales', text: '¿Cuál es la ecuación de los gases ideales que relaciona presión, volumen, moles y temperatura?', options: ['P·V = n·R·T', 'P/V = n·R·T', 'P·T = n·R·V', 'P = n·R·T·V'], answer: 0, explain: 'Correcto: la ecuación de los gases ideales es P·V = n·R·T, donde n son los moles y R la constante de los gases.' }
+			];
 		const SUPABASE_URL = 'https://upkayrgkhcuxvimmidgr.supabase.co';
 		const SUPABASE_KEY = 'sb_publishable_kSR7NWGjWdTvFwsryAUbmw_dd01X-75';
 		const state = { current: 0, correct: 0, answered: false, started: false, fullscreenActive: false, studentName: '', sessionId: '', eventSaved: false, exam: [] };
@@ -285,7 +696,7 @@
 				keepalive: true,
 				headers: { apikey: SUPABASE_KEY, Authorization: `Bearer ${SUPABASE_KEY}`, 'Content-Type': 'application/json', Prefer: 'return=minimal' },
 				body: JSON.stringify({ session_id: state.sessionId, name: state.studentName, status, question_number: state.current })
-			}).catch(() => {});
+			}).catch(() => { });
 		}
 
 		async function loadParticipationCount() {
@@ -404,7 +815,7 @@
 			show('quiz-screen');
 			renderQuestion();
 			if (document.documentElement.requestFullscreen) {
-				document.documentElement.requestFullscreen().then(() => { state.fullscreenActive = true; }).catch(() => {});
+				document.documentElement.requestFullscreen().then(() => { state.fullscreenActive = true; }).catch(() => { });
 			}
 		});
 		$('restart-btn').addEventListener('click', () => {
@@ -441,4 +852,5 @@
 		loadParticipationTable();
 	</script>
 </body>
+
 </html>
