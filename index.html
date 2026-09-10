@@ -4,7 +4,7 @@
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 	<meta name="theme-color" content="#f5f1e8">
-	<title>Quimio | Quiz de Cinemática y Energía</title>
+	<title>Quimio | Quiz de Gases</title>
 	<style>
 		:root {
 			--ink: #17211b;
@@ -112,7 +112,7 @@
 
 			<section id="start-screen" class="screen">
 				<h1>Piensa.<br><em>Reacciona.</em><br>Aprende.</h1>
-				<p class="intro">Un reto rápido sobre cinemática, trabajo y conservación de la energía mecánica. Resuelve problemas de movimiento y fuerzas.</p>
+				<p class="intro">Un reto rápido sobre las leyes de los gases: estequiometría de gases, ley de Boyle, leyes de Charles y Gay-Lussac, y ley combinada. Resuelve problemas de presión, volumen y temperatura.</p>
 				<div class="feature-grid">
 					<div class="feature"><b>5</b><span>preguntas</span></div>
 					<div class="feature"><b>01</b><span>intento único</span></div>
@@ -172,12 +172,23 @@
 
 	<script>
 		'use strict';
-		const questions = [
-			{ topic: 'Trabajo', text: '¿Cuál es la fórmula del trabajo realizado por una fuerza constante?', options: ['W = m·v', 'W = F·d·cos(θ)', 'W = m·g·h', 'W = ½·m·v²'], answer: 1, explain: 'Correcto: el trabajo es W = F·d·cos(θ), donde F es fuerza, d es desplazamiento y θ es el ángulo entre ellos.' },
-			{ topic: 'Energía mecánica', text: '¿Cuál es la energía mecánica total de un objeto?', options: ['E = m·g·h', 'E = ½·m·v²', 'E = m·g·h + ½·m·v²', 'E = F·d'], answer: 2, explain: 'Correcto: la energía mecánica es la suma de energía potencial gravitatoria (E_p = m·g·h) y energía cinética (E_c = ½·m·v²).' },
-			{ topic: 'Cinemática y energía', text: 'Un objeto se lanza hacia arriba con velocidad inicial de 20 m/s. ¿Cuál es su altura máxima? (Usa g = 10 m/s², sin fricción)', options: ['10 m', '20 m', '30 m', '40 m'], answer: 1, explain: 'Correcto: en la altura máxima, v = 0. Usando conservación de energía: ½·m·v₀² = m·g·h → h = v₀²/(2g) = 400/20 = 20 m.' },
-			{ topic: 'Plano inclinado y energía', text: 'Ejercicio: un bloque de 2 kg se suelta desde reposo en un plano inclinado sin fricción a 5 m de altura. ¿Cuál es su velocidad al llegar al pie del plano? (g = 10 m/s²)', options: ['5 m/s', '8 m/s', '10 m/s', '14 m/s'], answer: 2, explain: 'Correcto: E_p inicial = E_c final → m·g·h = ½·m·v² → v = √(2·g·h) = √(2·10·5) = √100 = 10 m/s.' },
-			{ topic: 'Teorema del trabajo y energía', text: 'Ejercicio: un auto de 1000 kg se acelera desde 0 a 20 m/s en línea recta. ¿Cuál es el trabajo realizado por la fuerza neta?', options: ['100 kJ', '200 kJ', '300 kJ', '400 kJ'], answer: 1, explain: 'Correcto: por el teorema del trabajo-energía, W = ΔE_c = ½·m·v² - 0 = ½·1000·400 = 200 kJ.' }
+			const questions = [
+		// Estequiometría de gases
+		{ topic: 'Estequiometría de gases', text: 'En la reacción N₂(g) + 3H₂(g) → 2NH₃(g), ¿qué volumen de NH₃ se forma a partir de 5 L de N₂, si todos los gases están en las mismas condiciones de T y P?', options: ['2.5 L', '5 L', '10 L', '15 L'], answer: 2, explain: 'Correcto: por volúmenes de reacción (ley de Avogadro), 1 volumen de N₂ produce 2 de NH₃. Así, 5 L de N₂ → 10 L de NH₃.' },
+		{ topic: 'Estequiometría de gases', text: '¿Qué volumen de O₂, a 0 °C y 1 atm, se necesita para quemar por completo 11.2 L de CH₄? (CH₄ + 2O₂ → CO₂ + 2H₂O; mismas condiciones de T y P)', options: ['5.6 L', '11.2 L', '22.4 L', '44.8 L'], answer: 2, explain: 'Correcto: la relación es 1 volumen de CH₄ por 2 de O₂. Entonces 11.2 L × 2 = 22.4 L de O₂.' },
+		{ topic: 'Estequiometría de gases', text: '¿Qué volumen de CO₂, medido a 0 °C y 1 atm, se produce al quemar 8 g de CH₄? (CH₄ + 2O₂ → CO₂ + 2H₂O; C = 12, H = 1; volumen molar = 22.4 L/mol)', options: ['5.6 L', '11.2 L', '16.8 L', '22.4 L'], answer: 1, explain: 'Correcto: moles de CH₄ = 8 / 16 = 0.5 mol. La relación es 1:1, así que se forman 0.5 mol de CO₂ × 22.4 L/mol = 11.2 L.' },
+		// Ley de Boyle
+		{ topic: 'Ley de Boyle', text: 'Según la ley de Boyle, si la temperatura permanece constante, la presión y el volumen de un gas están en relación...', options: ['Directamente proporcional', 'Inversamente proporcional', 'Sin relación alguna', 'Proporcional al cuadrado'], answer: 1, explain: 'Correcto: a T constante, P·V = constante, por lo que la presión y el volumen son inversamente proporcionales.' },
+		{ topic: 'Ley de Boyle', text: 'Un gas ocupa 500 mL a 740 mmHg. Si la temperatura no cambia, ¿qué presión (mmHg) se necesita para que ocupe 400 mL?', options: ['850 mmHg', '900 mmHg', '925 mmHg', '950 mmHg'], answer: 2, explain: 'Correcto: P₁·V₁ = P₂·V₂ → 740 × 500 = P₂ × 400 → P₂ = 370000 / 400 = 925 mmHg.' },
+		{ topic: 'Ley de Boyle', text: 'Un gas ocupa 2.5 L a 800 mmHg. Si la temperatura es constante, ¿a qué presión (mmHg) ocupará 4 L?', options: ['400 mmHg', '500 mmHg', '1000 mmHg', '1280 mmHg'], answer: 1, explain: 'Correcto: P₁·V₁ = P₂·V₂ → 800 × 2.5 = P₂ × 4 → P₂ = 2000 / 4 = 500 mmHg.' },
+		// Leyes de Charles y Gay-Lussac
+		{ topic: 'Ley de Charles', text: 'Según la ley de Charles, a presión constante, el volumen de un gas es directamente proporcional a...', options: ['La presión externa', 'Su masa', 'La temperatura absoluta (en kelvin)', 'Su densidad'], answer: 2, explain: 'Correcto: a P constante, V/T = constante, donde T se mide en kelvin (escala absoluta).' },
+		{ topic: 'Ley de Charles', text: 'Un gas ocupa 300 mL a 27 °C. ¿Qué volumen ocupará a 127 °C, si la presión permanece constante?', options: ['250 mL', '350 mL', '400 mL', '500 mL'], answer: 2, explain: 'Correcto: convertimos a kelvin: T₁ = 300 K y T₂ = 400 K. V₂ = V₁·T₂/T₁ = 300 × 400 / 300 = 400 mL.' },
+		{ topic: 'Ley de Gay-Lussac', text: 'Un gas a 27 °C ejerce 1.5 atm dentro de un recipiente rígido. ¿Cuál será la presión (atm) si se calienta a 127 °C?', options: ['1.75 atm', '2.0 atm', '2.25 atm', '3.0 atm'], answer: 1, explain: 'Correcto: a V constante, P₁/T₁ = P₂/T₂. Con T₁ = 300 K y T₂ = 400 K: P₂ = 1.5 × 400 / 300 = 2.0 atm.' },
+		// Ley combinada
+		{ topic: 'Ley combinada', text: 'La ley combinada de los gases relaciona presión, volumen y temperatura. ¿Cuál es su expresión correcta?', options: ['P₁·V₁ = P₂·V₂', 'V₁/T₁ = V₂/T₂', 'P₁·V₁/T₁ = P₂·V₂/T₂', 'P₁/T₁ = P₂/T₂'], answer: 2, explain: 'Correcto: la ley combinada reúne las tres variables: P₁·V₁/T₁ = P₂·V₂/T₂, con la temperatura en kelvin.' },
+		{ topic: 'Ley combinada', text: 'Una muestra de gas ocupa 2 L a 300 K y 1 atm. ¿Qué volumen (L) ocupará a 400 K y 2 atm?', options: ['1.33 L', '1.5 L', '2.67 L', '3.0 L'], answer: 0, explain: 'Correcto: V₂ = P₁·V₁·T₂ / (P₂·T₁) = (1 × 2 × 400) / (2 × 300) = 800 / 600 ≈ 1.33 L.' },
+		{ topic: 'Ley combinada', text: 'Un gas ocupa 600 mL a 27 °C y 720 mmHg. ¿Qué volumen (mL) ocupará a 47 °C y 800 mmHg?', options: ['540 mL', '576 mL', '600 mL', '640 mL'], answer: 1, explain: 'Correcto: V₂ = P₁·V₁·T₂ / (P₂·T₁) = (720 × 600 × 320) / (800 × 300) = 138240000 / 240000 = 576 mL.' }
 		];
 		const SUPABASE_URL = 'https://upkayrgkhcuxvimmidgr.supabase.co';
 		const SUPABASE_KEY = 'sb_publishable_kSR7NWGjWdTvFwsryAUbmw_dd01X-75';
@@ -299,7 +310,7 @@
 				});
 				if (!response.ok) throw new Error('participation unavailable');
 				const entries = await response.json();
-				
+
 				// Get latest status per name
 				const latestPerName = {};
 				entries.forEach((entry) => {
@@ -308,7 +319,7 @@
 						latestPerName[normalizedName] = entry;
 					}
 				});
-				
+
 				const unique = Object.values(latestPerName).sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
 				renderParticipationTable(unique);
 			} catch (error) {
@@ -339,13 +350,10 @@
 			if (state.answered) return;
 			state.answered = true;
 			const item = state.exam[state.current];
-			document.querySelectorAll('.answer').forEach((button, index) => {
+			document.querySelectorAll('.answer').forEach((button) => {
 				button.disabled = true;
-				if (index === item.answer) button.classList.add('correct');
-				if (index === selected && selected !== item.answer) button.classList.add('wrong');
 			});
-			if (selected === item.answer) { state.correct++; $('feedback').textContent = item.explain; }
-			else { $('feedback').textContent = `No esta vez. ${item.options[item.answer]} era la respuesta correcta.`; $('feedback').classList.add('bad'); }
+			if (selected === item.answer) { state.correct++; }
 			$('next-btn').hidden = false;
 			$('next-btn').textContent = state.current === state.exam.length - 1 ? 'Ver resultado →' : 'Siguiente →';
 		}
