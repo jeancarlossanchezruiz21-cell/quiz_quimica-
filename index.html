@@ -499,10 +499,10 @@
 
 			<section id="start-screen" class="screen">
 				<h1>Piensa.<br><em>Reacciona.</em><br>Aprende.</h1>
-				<p class="intro">Un reto sobre Movimiento Rectilíneo Uniforme (MRU). Cada intento muestra 5 preguntas al azar, para practicar velocidad, distancia y tiempo.</p>
+				<p class="intro">Un reto sobre Movimiento Rectilíneo Uniforme (MRU). Seis ejercicios: 3 fáciles y 3 difíciles, para practicar velocidad, distancia y tiempo.</p>
 				<div class="feature-grid">
-					<div class="feature"><b>5</b><span>preguntas al azar</span></div>
-					<div class="feature"><b>5</b><span>en el banco</span></div>
+					<div class="feature"><b>6</b><span>ejercicios</span></div>
+					<div class="feature"><b>3+3</b><span>fáciles y difíciles</span></div>
 					<div class="feature"><b>01</b><span>intento único</span></div>
 				</div>
 				<div class="name-field">
@@ -530,7 +530,7 @@
 			</section>
 
 			<section id="quiz-screen" class="screen" hidden>
-				<div class="stats"><span id="question-count">Pregunta 01 / 5</span></div>
+				<div class="stats"><span id="question-count">Pregunta 01 / 6</span></div>
 				<div class="progress-track">
 					<div id="progress" class="progress-value"></div>
 				</div>
@@ -552,7 +552,7 @@
 					<p id="result-message">Tu intento quedó registrado.</p>
 				</div>
 				<div class="result-list">
-					<div class="result-row"><span>Respuestas correctas</span><strong id="correct-count">0 / 5</strong>
+					<div class="result-row"><span>Respuestas correctas</span><strong id="correct-count">0 / 6</strong>
 					</div>
 					<div class="result-row"><span>Puntuación</span><strong id="final-points">0 puntos</strong></div>
 					<div class="result-row"><span>Estado</span><strong>Intento cerrado</strong></div>
@@ -574,70 +574,82 @@
 
 	<script>
 		'use strict';
-		const questions = [
-			// ========== 3 FÁCILES ==========
-			{
-				topic: 'MRU - Fácil',
-				text: '¿Qué es el Movimiento Rectilíneo Uniforme (MRU)?',
-				options: [
-					'Movimiento en línea recta con velocidad constante',
-					'Movimiento en círculo con velocidad constante',
-					'Movimiento en línea recta con aceleración constante',
-					'Movimiento que cambia de dirección constantemente'
-				],
-				answer: 0,
-				explain: 'Correcto: el MRU es el movimiento que se realiza en línea recta y con velocidad constante (aceleración = 0).'
-			},
-			{
-				topic: 'MRU - Fácil',
-				text: '¿Cuál es la fórmula correcta para calcular la distancia (d) en un MRU?',
-				options: [
-					'd = v / t',
-					'd = v × t',
-					'd = v + t',
-					'd = v² × t'
-				],
-				answer: 1,
-				explain: 'Correcto: en el MRU la distancia se calcula multiplicando la velocidad por el tiempo: d = v · t.'
-			},
-			{
-				topic: 'MRU - Fácil',
-				text: 'Un auto se mueve a 20 m/s durante 5 segundos. ¿Qué distancia recorre?',
-				options: [
-					'4 m',
-					'25 m',
-					'100 m',
-					'15 m'
-				],
-				answer: 2,
-				explain: 'Correcto: d = v × t = 20 m/s × 5 s = 100 m.'
-			},
+			const questions = [
+		// ===== 3 FÁCILES =====
+		{
+			topic: 'MRU - Fácil',
+		text: '¿Qué caracteriza al Movimiento Rectilíneo Uniforme (MRU)?',
+		options: [
+		'Velocidad constante en línea recta',
+		'Aceleración constante en línea recta',
+		'Movimiento en círculo con velocidad constante',
+		'Movimiento que cambia de dirección siempre'
+		],
+		answer: 0,
+			explain: 'Correcto: en el MRU la velocidad es constante y la aceleración es cero, por lo que la trayectoria es una línea recta.'
+		},
+		{
+			topic: 'MRU - Fácil',
+		text: 'Un auto viaja a 15 m/s. ¿Qué distancia recorre en 8 segundos?',
+		options: [
+		'23 m',
+		'60 m',
+		'120 m',
+		'150 m'
+		],
+		answer: 2,
+			explain: 'Correcto: d = v × t = 15 m/s × 8 s = 120 m.'
+		},
+		{
+			topic: 'MRU - Fácil',
+		text: 'Un corredor mantiene 5 m/s durante 40 segundos. ¿Qué distancia recorre?',
+		options: [
+		'8 m',
+		'45 m',
+		'200 m',
+		'250 m'
+		],
+		answer: 2,
+			explain: 'Correcto: d = v × t = 5 m/s × 40 s = 200 m.'
+		},
 
-			// ========== 2 DIFÍCILES ==========
-			{
-				topic: 'MRU - Difícil',
-				text: 'Un ciclista viaja a 36 km/h. ¿Cuántos metros recorre en 2 minutos y 30 segundos?',
-				options: [
-					'900 m',
-					'1500 m',
-					'1800 m',
-					'2160 m'
-				],
-				answer: 1,
-				explain: 'Correcto: primero convertimos: 36 km/h = 10 m/s. Tiempo = 2 min 30 s = 150 s. d = 10 m/s × 150 s = 1500 m.'
-			},
-			{
-				topic: 'MRU - Difícil',
-				text: 'Dos autos parten del mismo punto en direcciones opuestas. Uno va a 15 m/s y el otro a 25 m/s. ¿A qué distancia estarán después de 40 segundos?',
-				options: [
-					'400 m',
-					'600 m',
-					'1000 m',
-					'1600 m'
-				],
-				answer: 3,
-				explain: 'Correcto: como van en direcciones opuestas, se suman las velocidades: 15 + 25 = 40 m/s. Distancia = 40 m/s × 40 s = 1600 m.'
-			}
+		// ===== 3 DIFÍCILES =====
+		{
+			topic: 'MRU - Difícil',
+		text: 'Un tren viaja a 72 km/h. ¿Qué distancia recorre en 1 minuto y 15 segundos?',
+		options: [
+		'900 m',
+		'1200 m',
+		'1500 m',
+		'5400 m'
+		],
+		answer: 2,
+			explain: 'Correcto: 72 km/h = 20 m/s y 1 min 15 s = 75 s. Entonces d = 20 × 75 = 1500 m.'
+		},
+		{
+			topic: 'MRU - Difícil',
+		text: 'Dos autos parten del mismo punto en direcciones opuestas. Uno va a 18 m/s y el otro a 22 m/s. ¿A qué distancia estarán después de 30 segundos?',
+		options: [
+		'600 m',
+		'1200 m',
+		'1800 m',
+		'2400 m'
+		],
+		answer: 1,
+			explain: 'Correcto: al ir en direcciones opuestas las velocidades se suman: 18 + 22 = 40 m/s. Distancia = 40 × 30 = 1200 m.'
+		},
+		{
+			topic: 'MRU - Difícil',
+		text: 'Un auto A va a 90 km/h y sale 20 minutos antes que un auto B, que va a 120 km/h por la misma carretera. ¿Cuánto tarda B en alcanzar a A (tiempo desde que sale B)?',
+		options: [
+		'0.5 h',
+		'1 h',
+		'1.5 h',
+		'2 h'
+		],
+		answer: 1,
+			explain: 'Correcto: en 20 min (1/3 h) A recorre 90 × 1/3 = 30 km de ventaja. La diferencia de rapidez es 120 - 90 = 30 km/h. B alcanza en 30 / 30 = 1 h.'
+		}
 		];
 
 		const SUPABASE_URL = 'https://upkayrgkhcuxvimmidgr.supabase.co';
@@ -659,7 +671,7 @@
 
 		function createExam() {
 			const random = Math.random;
-			state.exam = shuffle(questions, random).slice(0, 5).map((question) => {
+			state.exam = shuffle(questions, random).slice(0, 6).map((question) => {
 				const options = shuffle(question.options.map((text, index) => ({ text, correct: index === question.answer })), random);
 				return { ...question, options: options.map((option) => option.text), answer: options.findIndex((option) => option.correct) };
 			});
@@ -671,7 +683,7 @@
 		}
 
 		function escapeHtml(value) {
-			return value.replace(/[&<>'\"]/g, (character) => ({ '&': '&', '<': '<', '>': '>', "'": '&#39;', '"': '"' })[character]);
+			return value.replace(/[&<>'"]/g, (character) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' })[character]);
 		}
 
 		function normalizeName(name) {
